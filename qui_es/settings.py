@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
     'django_rename_app',
     'accounts',
+    'my_quiz',
 ]
 
 MIDDLEWARE = [
