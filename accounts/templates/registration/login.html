@@ -9,7 +9,7 @@
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Log In</button>
+    <a role="button" href="{% url 'login' %}">Log In</a>
 </form>
 </body>
 </html>
