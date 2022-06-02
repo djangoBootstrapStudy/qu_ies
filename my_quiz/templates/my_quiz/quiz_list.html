@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>My Quiz</h2>
+{% for q in quiz_list %}
+<h3>퀴즈 제목: <a href="{{ q.get_absolute_url }}">{{ q.title }}</a></h3>
+{% endfor %}
+</body>
+</html>
