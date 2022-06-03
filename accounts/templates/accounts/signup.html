@@ -7,8 +7,8 @@
 <body>
 <h2>Sign Up</h2>
 <form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
+    {% csrf_token %}
+    {{ form.as_p }}
     <a role="button" href="{% url 'login' %}">Go To Login</a>
 </form>
 </body>
