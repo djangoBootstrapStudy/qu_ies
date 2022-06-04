@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "accounts",
     "my_quiz",
     "make_quiz",
+    "solving",
 ]
 
 MIDDLEWARE = [
