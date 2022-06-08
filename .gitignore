@@ -166,7 +166,6 @@ dmypy.json
 cython_debug/
 
 .idea/
-qui_es/base.py
 
 
 # PyCharm
