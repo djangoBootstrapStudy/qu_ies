@@ -21,4 +21,5 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/", include("accounts.urls"), name="accounts"),
     path("my-qui-es/", include("my_quiz.urls")),
+    path("",include("make_quiz.urls"))
 ]
