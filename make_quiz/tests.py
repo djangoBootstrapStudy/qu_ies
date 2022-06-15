@@ -1,6 +1,10 @@
 from django.test import TestCase,Client
 from django.contrib.auth.models import User
+from bs4 import BeautifulSoup
 from my_quiz.models import Quiz
+from .models import QuizQuestion, QuizExample
+from .views import create_quiz
+
 
 # Create your tests here.
 #create_quiz test
@@ -9,7 +13,7 @@ class TestView(TestCase):
     def setUp(self):
         self.client=Client()
         #사용자
-        User.objects.create_user('mj','password')
+        self.user=User.objects.create_user('mj','password')
 
     #로그인여부 확인
     def test_check_login(self):
@@ -19,23 +23,24 @@ class TestView(TestCase):
         self.assertFalse(login) #아직 로그인 구현 안함
 
     #퀴즈생성 페이지 이동
-    def test_create_quiz_page(self):
+    def test_move_quiz_page(self):
         #Given
+        self.client.login(username=self.user.username, password=self.user.password)
         response=self.client.get('/you-qui-es/')
-        #Then
-        self.assertEqual(response.status_code,200)
+        #when
+        soup=BeautifulSoup(response.content,'html.parser')
+        #then
+        self.assertEqual(response.status_code, 203)
+        self.assertEqual('퀴즈',soup.title.text)
 
-    #퀴즈1개 제대로 생성되었는지 확인
+    #퀴즈 1개 생성
     def test_create_quiz(self):
         #Given
-        user=User.objects.get(username='mj')
-        #When
-        quiz_001=Quiz.objects.create(
-            author=user,
-            title="mj의 quiz입니다."
-        )
-        #Then
-        self.assertEqual(Quiz.objects.count(),1)
-
-    #퀴즈생성후 문제, 보기 생성 확인
-    #테스트제목 확인
+        data={
+            "title": "올바른 quiz입니다."
+        }
+        #when
+        create_quiz(self.user,data)
+        #then
+        self.assertNotEqual(Quiz.objects.last().title, "잘못된 quiz입니다.") #잘못된 quiz생성
+        self.assertEqual(Quiz.objects.last().title, data['title']) #quiz생성
