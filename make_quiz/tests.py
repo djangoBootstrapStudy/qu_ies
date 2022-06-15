@@ -44,3 +44,26 @@ class TestView(TestCase):
         #then
         self.assertNotEqual(Quiz.objects.last().title, "잘못된 quiz입니다.") #잘못된 quiz생성
         self.assertEqual(Quiz.objects.last().title, data['title']) #quiz생성
+
+    # 퀴즈에 문제 1개 생성
+    def test_create_one_question_in_quiz(self):
+        # Given
+        #퀴즈 1개 생성 & 문제생성시 필요한 데이터
+        self.quiz_001 = Quiz.objects.create(author=self.user, title="test퀴즈입니다.") #1
+        data = {
+            'quiz': self.quiz_001.id,
+            'no': 1, #수정해야됨
+            'content': "내가 좋아하는 계절은?",
+            'answer': 1, #수정해야됨
+        }
+        # When
+        #문제 생성함수
+        create_question(self.quiz_001, data)
+
+        # Then
+        # 퀴즈가 동일한지
+        # 퀴즈의 문제개수가 10개 이하인지
+        # answer이 같은지
+        self.assertEqual(QuizQuestion.objects.last().quiz, data['quiz'])
+        self.assertTrue(QuizQuestion.objects.filter(quiz=self.quiz_001.id).count() <= 10)
+        self.assertEqual(QuizQuestion.objects.get(quiz=self.quiz_001.id).answer, data['answer'])
