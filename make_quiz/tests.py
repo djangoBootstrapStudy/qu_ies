@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from bs4 import BeautifulSoup
 from my_quiz.models import Quiz
 from .models import QuizQuestion, QuizExample
-from .views import create_quiz
+from .views import create_quiz,create_question
 
 
 # Create your tests here.
@@ -50,20 +50,24 @@ class TestView(TestCase):
         # Given
         #퀴즈 1개 생성 & 문제생성시 필요한 데이터
         self.quiz_001 = Quiz.objects.create(author=self.user, title="test퀴즈입니다.") #1
+        self.question_no_001 = QuizQuestion.objects.filter(quiz=self.quiz_001).count() + 1
+
         data = {
-            'quiz': self.quiz_001.id,
-            'no': 1, #수정해야됨
-            'content': "내가 좋아하는 계절은?",
-            'answer': 1, #수정해야됨
+            'question_content': "내가 좋아하는 계절은?",
+            'answer': 3, #수정해야됨
         }
         # When
         #문제 생성함수
-        create_question(self.quiz_001, data)
+        create_question(self.quiz_001,self.question_no_001, data)
 
         # Then
-        # 퀴즈가 동일한지
-        # 퀴즈의 문제개수가 10개 이하인지
-        # answer이 같은지
-        self.assertEqual(QuizQuestion.objects.last().quiz, data['quiz'])
-        self.assertTrue(QuizQuestion.objects.filter(quiz=self.quiz_001.id).count() <= 10)
-        self.assertEqual(QuizQuestion.objects.get(quiz=self.quiz_001.id).answer, data['answer'])
+        '''
+        1. 문제가 생성되었는지
+        2. 퀴즈가 동일한지
+        3. 퀴즈의 문제개수가 10개 이하인지
+        4. answer이 같은지
+        '''
+        # self.assertEqual(success['message'],"success")
+        self.assertEqual(QuizQuestion.objects.last().quiz, self.quiz_001)
+        self.assertTrue(QuizQuestion.objects.filter(quiz=self.quiz_001).count() <=10 )
+        self.assertEqual(QuizQuestion.objects.get(quiz=self.quiz_001,no=1).answer, data['answer'])
