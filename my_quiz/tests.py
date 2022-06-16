@@ -66,7 +66,7 @@ class TestView(TestCase):
         response = self.client.get(self.my_quiz_url)
         soup = BeautifulSoup(response.content, "html.parser")
         main_area = soup.find("div", id="main-area")  # quiz 리스트가 있는 영역
-        count_quiz = len(main_area.find("li"))
+        count_quiz = len(main_area.find_all("li"))
 
         # Then
         # 페이지에서 보이는 퀴즈의 개수와 로그인한 사용자가 만든 퀴즈의 개수 비교
