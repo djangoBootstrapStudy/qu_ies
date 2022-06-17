@@ -71,62 +71,43 @@ class TestView(TestCase):
         self.assertEqual(QuizQuestion.objects.last().quiz, self.quiz_001)
         self.assertTrue(QuizQuestion.objects.filter(quiz=self.quiz_001).count() <= 10)
 
-        # 문제 하나에 보기 4개 생성
+    # 문제 하나에 보기 4개 생성
+    def test_create_four_examples_in_one_question_in_quiz(self):
+        # Given
+        #퀴즈생성 & 퀴즈의 문제 생성
+        self.quiz_001 = Quiz.objects.create(author=self.user, title="test퀴즈입니다.")
+        self.question_no_001 = (
+                QuizQuestion.objects.filter(quiz=self.quiz_001).count() + 1
+        )
+        self.question_001 = QuizQuestion.objects.create(
+            quiz=self.quiz_001,
+            no=self.question_no_001,
+            content="내가 좋아하는 계절은?",
+        )
+        # 보기 생성시 필요한 데이터
+        data={
+            "example_1":"봄",
+            "example_2":"여름",
+            "example_3":"가을",
+            "example_4":"겨울",
+            # "answer":"example_4"
+        }
+        # When
+        #문제의 보기 4개 생성
+        for i in range(4):
+            #보기번호
+            self.example_no= (
+                    QuizExample.objects.filter(question=self.question_001).count() + 1
+            )
+            #보기생성함수
+            create_example(self.question_001,self.example_no,data)
+        # Then
+        #퀴즈의 문제가 1개인지 확인
+        #보기가 4개인지 확인
+        #보기 4개중 answer=True인 값이 1개인지 확인
+        self.assertEqual(QuizQuestion.objects.filter(quiz=self.quiz_001).count(),1)
+        self.assertEqual(QuizExample.objects.filter(question=self.question_001).count(),4)
+        # self.assertEqual(QuizExample.objects.filter(question=self.question_001,answer=True),1)
 
-        #
-        # def test_create_quiz(self):
-        #     #given
-        #     data={
-        #         'author':self.user
-        #         'title':"test게시물입니다.",
-        #     }
-        #     #when
-        #     self.client.post('/you-qui-es/',data)
-        #     print("1")
-        #
-        #     #Then
-        #     self.assertEqual(Quiz.objects.get(id=1).title, "test게시물입니다.")
-        #
-        #
-        # def test_create_all_quiz(self):
-        #     # Given
-        #     user = User.objects.get(username='mj')
-        #     quiz_001 = Quiz.objects.create(
-        #         author=user,
-        #         title="mj의 quiz입니다."
-        #     )
-        #     # When
-        #     quesion_001 = QuizQuestion.objects.create(
-        #         quiz=quiz_001,
-        #         no=1,  # html만들면 변경
-        #         content="내가 좋아하는 계절은?",
-        #         answer=1,  # html만들면 변경
-        #     )
-        #     example_001 = QuizExample.objects.create(
-        #         question=quesion_001,
-        #         no=1,
-        #         content="봄",
-        #     )
-        #     example_002 = QuizExample.objects.create(
-        #         question=quesion_001,
-        #         no=2,
-        #         content="여름",
-        #     )
-        #     example_003 = QuizExample.objects.create(
-        #         question=quesion_001,
-        #         no=3,
-        #         content="가을",
-        #     )
-        #     example_004 = QuizExample.objects.create(
-        #         question=quesion_001,
-        #         no=4,
-        #         content="겨울",
-        #     )
-        #     # Then
-        #
-        #     # 퀴즈의 문제가 10개 이하인지 확인
-        #     self.assertEqual(QuizQuestion.objects.count(), 1)
-        #     # 보기가 4개인지 확인
-
-        # 퀴즈생성후 문제, 보기 생성 확인
-        # 테스트제목 확인
+    # 퀴즈생성후 문제, 보기 생성 확인
+    # 테스트제목 확인
