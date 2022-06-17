@@ -56,7 +56,6 @@ class TestView(TestCase):
 
         data = {
             "question_content": "내가 좋아하는 계절은?",
-            "answer": 3,  # 수정해야됨
         }
         # When
         # 문제 생성함수
@@ -67,11 +66,67 @@ class TestView(TestCase):
         1. 문제가 생성되었는지
         2. 퀴즈가 동일한지
         3. 퀴즈의 문제개수가 10개 이하인지
-        4. answer이 같은지
         """
         # self.assertEqual(success['message'],"success")
         self.assertEqual(QuizQuestion.objects.last().quiz, self.quiz_001)
         self.assertTrue(QuizQuestion.objects.filter(quiz=self.quiz_001).count() <= 10)
-        self.assertEqual(
-            QuizQuestion.objects.get(quiz=self.quiz_001, no=1).answer, data["answer"]
-        )
+
+        # 문제 하나에 보기 4개 생성
+
+        #
+        # def test_create_quiz(self):
+        #     #given
+        #     data={
+        #         'author':self.user
+        #         'title':"test게시물입니다.",
+        #     }
+        #     #when
+        #     self.client.post('/you-qui-es/',data)
+        #     print("1")
+        #
+        #     #Then
+        #     self.assertEqual(Quiz.objects.get(id=1).title, "test게시물입니다.")
+        #
+        #
+        # def test_create_all_quiz(self):
+        #     # Given
+        #     user = User.objects.get(username='mj')
+        #     quiz_001 = Quiz.objects.create(
+        #         author=user,
+        #         title="mj의 quiz입니다."
+        #     )
+        #     # When
+        #     quesion_001 = QuizQuestion.objects.create(
+        #         quiz=quiz_001,
+        #         no=1,  # html만들면 변경
+        #         content="내가 좋아하는 계절은?",
+        #         answer=1,  # html만들면 변경
+        #     )
+        #     example_001 = QuizExample.objects.create(
+        #         question=quesion_001,
+        #         no=1,
+        #         content="봄",
+        #     )
+        #     example_002 = QuizExample.objects.create(
+        #         question=quesion_001,
+        #         no=2,
+        #         content="여름",
+        #     )
+        #     example_003 = QuizExample.objects.create(
+        #         question=quesion_001,
+        #         no=3,
+        #         content="가을",
+        #     )
+        #     example_004 = QuizExample.objects.create(
+        #         question=quesion_001,
+        #         no=4,
+        #         content="겨울",
+        #     )
+        #     # Then
+        #
+        #     # 퀴즈의 문제가 10개 이하인지 확인
+        #     self.assertEqual(QuizQuestion.objects.count(), 1)
+        #     # 보기가 4개인지 확인
+
+        # 퀴즈생성후 문제, 보기 생성 확인
+        # 테스트제목 확인

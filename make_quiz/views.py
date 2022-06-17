@@ -16,7 +16,6 @@ def create_question(quiz, no, data):
         quiz=quiz,
         no=no,
         content=data["question_content"],
-        answer=data["answer"],
     )
     # {
     # "message": "success",
@@ -30,9 +29,10 @@ def create(request):
         question_content = request.POST.get("question")
 
         data = {
+            # quiz
             "title": title,
+            # question
             "question_content": question_content,
-            "answer": 3,
         }
 
         quiz = create_quiz(user, data)
@@ -42,7 +42,7 @@ def create(request):
         except:
             if no > 10:
                 return render(
-                    request, "make_quiz.html", {"message": "문제는 최대 10개까지 만들수 있습니다."}
+                    request, "make_quiz.html", {"message": "문제는 최대 10개까지만 만들수 있습니다."}
                 )
 
         question = create_question(quiz, no, data)
