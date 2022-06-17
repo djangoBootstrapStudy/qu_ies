@@ -18,11 +18,11 @@ class TestView(TestCase):
         self.user = User.objects.create_user("mj", "password")
 
     # 로그인여부 확인
-    def test_check_login(self):
-        # When
-        login = self.client.login(username="mj", password="password")
-        # Then
-        self.assertFalse(login)  # 아직 로그인 구현 안함
+    # def test_check_login(self):
+    #     # When
+    #     login = self.client.login(username="mj", password="password")
+    #     # Then
+    #     self.assertFalse(login)  # 아직 로그인 구현 안함
 
     # 퀴즈생성 페이지 이동
     def test_move_quiz_page(self):
@@ -121,7 +121,7 @@ class TestView(TestCase):
         # Given
         self.quiz_001 = Quiz.objects.create(author=self.user, title="test퀴즈입니다.")
         self.question_no_001 = (
-                QuizQuestion.objects.filter(quiz=self.quiz_001).count() + 1
+            QuizQuestion.objects.filter(quiz=self.quiz_001).count() + 1
         )
         self.question_001 = QuizQuestion.objects.create(
             quiz=self.quiz_001,
@@ -141,7 +141,7 @@ class TestView(TestCase):
         for i in range(4):
             # 보기번호
             self.example_no = (
-                    QuizExample.objects.filter(question=self.question_001).count() + 1
+                QuizExample.objects.filter(question=self.question_001).count() + 1
             )
             # 보기생성함수
             create_example(self.question_001, self.example_no, data)
