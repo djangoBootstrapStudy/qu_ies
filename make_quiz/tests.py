@@ -116,4 +116,52 @@ class TestView(TestCase):
         )
         # self.assertEqual(QuizExample.objects.filter(question=self.question_001,answer=True),1)
 
+    # 문제 하나에 퀴즈 4개의 내용 맞는지 확인 & 정답확인(나중에)
+    def test_check_four_examples_contents_in_one_question_in_quiz(self):
+        # Given
+        self.quiz_001 = Quiz.objects.create(author=self.user, title="test퀴즈입니다.")
+        self.question_no_001 = (
+                QuizQuestion.objects.filter(quiz=self.quiz_001).count() + 1
+        )
+        self.question_001 = QuizQuestion.objects.create(
+            quiz=self.quiz_001,
+            no=self.question_no_001,
+            content="내가 좋아하는 계절은?",
+        )
+        # 보기 생성시 필요한 데이터
+        data = {
+            "example1": "봄",
+            "example2": "여름",
+            "example3": "가을",
+            "example4": "겨울",
+        }
+
+        # When
+        # 문제의 보기 4개 생성
+        for i in range(4):
+            # 보기번호
+            self.example_no = (
+                    QuizExample.objects.filter(question=self.question_001).count() + 1
+            )
+            # 보기생성함수
+            create_example(self.question_001, self.example_no, data)
+
+        # Then
+        # 4개 보기의 값이 맞는지 확인
+        self.assertEqual(
+            QuizExample.objects.get(question=self.question_001, no=1).content,
+            data["example1"],
+        )
+        self.assertEqual(
+            QuizExample.objects.get(question=self.question_001, no=2).content,
+            data["example2"],
+        )
+        self.assertEqual(
+            QuizExample.objects.get(question=self.question_001, no=3).content,
+            data["example3"],
+        )
+        self.assertEqual(
+            QuizExample.objects.get(question=self.question_001, no=4).content,
+            data["example4"],
+        )
     # 테스트제목 확인
