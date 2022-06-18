@@ -8,13 +8,15 @@
 <h2>My Quiz</h2>
 <div id="main-area">
     <form action="{% url 'delete' %}" method="post">
-        <!--{% for q in quiz_list %}-->
-        <!--{% if q.author == request.user %} 수정하기!! (수정함) -->
-        {% csrf_token %}
-        <h3>퀴즈 제목: <a href="{{ q.get_absolute_url }}" id="quiz-{{ q.pk }}">{{ q.title }}</a></h3>
-        <input type="checkbox" name="deletes[]" value="{{ q.pk }}" id="checkbox-{{ q.pk }}">
-        <!--{% endif %}-->
-        <!--{% endfor %}-->
+        <ul>
+            {% for q in quiz_list %}
+            <!--{% if q.author == request.user %} 수정하기!! (수정함) -->
+            {% csrf_token %}
+            <li>퀴즈 제목: <a href="{{ q.get_absolute_url }}" id="quiz-{{ q.pk }}">{{ q.title }}</a></li>
+            <input type="checkbox" name="deletes[]" value="{{ q.pk }}">
+            <!--{% endif %}-->
+            {% endfor %}
+        </ul>
         <button id="delete-quiz" type="submit">삭제</button>
     </form>
     <a href="/" id="goto-main">메인으로</a> <!-- '도메인/' 으로 이동 -->
