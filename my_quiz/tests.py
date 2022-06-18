@@ -20,7 +20,8 @@ class TestView(TestCase):
         )
 
         self.quiz_002 = Quiz.objects.create(
-            author=self.user_mango, title="애플망고 vs 망고스틴"
+            author=self.user_mango,
+            title="애플망고 vs 망고스틴",
         )
 
         self.my_quiz_url = "/my-qui-es/"  # My Quiz 페이지 url
@@ -66,12 +67,14 @@ class TestView(TestCase):
         response = self.client.get(self.my_quiz_url)
         soup = BeautifulSoup(response.content, "html.parser")
         main_area = soup.find("div", id="main-area")  # quiz 리스트가 있는 영역
-        count_quiz = len(soup.find_all("li"))
+        quiz_count = len(main_area.find_all("li"))  # /my-qui-es/ 에서 보이는 퀴즈의 개수
 
         # Then
-        # 페이지에서 보이는 퀴즈의 개수와 로그인한 사용자가 만든 퀴즈의 개수 비교
-        self.assertEqual(count_quiz, len(Quiz.objects.filter(author=self.user_mango)))
         # 로그인한 사용자의 퀴즈만 존재하는지 확인
+        # 1. 페이지에 보이는 퀴즈의 개수와 로그인한 사용자가 만든 퀴즈의 개수가 같은가?
+        self.assertEqual(quiz_count, len(Quiz.objects.filter(author=self.user_mango)))
+
+        # 2. 페이지에 보이는 퀴즈는 모두 로그인한 사용자가 만든 퀴즈가 맞는가?
         for q in Quiz.objects.filter(author=self.user_mango):
             quiz_title = main_area.find("a", id=f"quiz-{q.pk}")
             self.assertEqual(quiz_title.text, q.title)
