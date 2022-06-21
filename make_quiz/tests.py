@@ -164,4 +164,5 @@ class TestView(TestCase):
             QuizExample.objects.get(question=self.question_001, no=4).content,
             data["example4"],
         )
+
     # 테스트제목 확인

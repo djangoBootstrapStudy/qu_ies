@@ -31,7 +31,7 @@ def create_example(question, no, data):
 def create(request):
     if request.method == "POST":
         user = request.user
-        if user.is_authenticated: # 로그인하면
+        if user.is_authenticated:  # 로그인하면
             title = request.POST.get("title")
             question_content = request.POST.get("question")
             example1 = request.POST.get("example1")
@@ -63,9 +63,9 @@ def create(request):
                 example_no = QuizExample.objects.filter(question=question).count() + 1
                 create_example(question, example_no, data)
 
-            return redirect("/done-qui-es/") #여기서 return 이면 test가 달라짐
+            return redirect("/done-qui-es/")  # 여기서 return 이면 test가 달라짐
         else:
-            return render(request, "make_quiz.html",{"message": "로그인을 해주세요"})
+            return render(request, "make_quiz.html", {"message": "로그인을 해주세요"})
 
     else:
         return render(request, "make_quiz.html")
