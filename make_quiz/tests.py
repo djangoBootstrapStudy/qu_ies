@@ -25,7 +25,7 @@ class TestView(TestCase):
     #     self.assertFalse(login)  # 아직 로그인 구현 안함
 
     # 퀴즈생성 페이지 이동
-    def test_move_quiz_page(self):
+    def test_enter_quiz_page(self):
         # Given
         self.client.login(username=self.user.username, password=self.user.password)
         response = self.client.get("/you-qui-es/")
@@ -42,7 +42,6 @@ class TestView(TestCase):
         # when
         create_quiz(self.user, data)
         # then
-        self.assertNotEqual(Quiz.objects.last().title, "잘못된 quiz입니다.")  # 잘못된 quiz생성
         self.assertEqual(Quiz.objects.last().title, data["title"])  # quiz생성
 
     # 퀴즈에 문제 1개 생성
