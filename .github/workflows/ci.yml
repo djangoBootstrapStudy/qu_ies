@@ -21,8 +21,18 @@ jobs:
         run: |
            pip install -r requirements.txt --upgrade pip
 
+      # black 추가
+      - name: Run Black
+        run: black . --check
+
+      # isort 추가
+      - name: Run Isort
+        run: isort . --check --diff
+
+      # test 실행
       - name: Run Tests
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
-          python manage.py test
+            python manage.py test
+
