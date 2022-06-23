@@ -32,6 +32,7 @@ jobs:
       # test 실행
       - name: Run Tests
         env:
-            SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
             python manage.py test
+
