@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('my_quiz', '0003_quiz_public'),
+        ("my_quiz", "0003_quiz_public"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='quiz',
-            name='public',
+            model_name="quiz",
+            name="public",
         ),
         migrations.AddField(
-            model_name='quiz',
-            name='private',
+            model_name="quiz",
+            name="private",
             field=models.BooleanField(blank=True, default=1),
             preserve_default=False,
         ),
