@@ -1,0 +1,125 @@
+.header hr{
+    width:65%;
+    size:10px;
+    margin: 0px auto;
+}
+hr{
+    width:50%;
+    margin: 0px auto;
+}
+body{
+    background: rgba(255, 248, 232, 1);
+}
+
+.logo{
+    width: 150px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    font-size: 70px ;
+}
+.form-check{
+    margin-left: 80%;
+    font-size: 20px ;
+}
+.middle{
+    height: 600px;
+    padding: 0 400px ;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.title{
+    height: 70px;
+    margin-top: 30px;
+
+}
+.title input{
+    padding-top: 20px;
+    width: 50%;
+    height: 30px;
+    display: flex;
+    text-align: center;
+    margin: 0 auto;
+    padding: 2% 0;
+    font-size: 30px;
+    border:none;
+    outline:none;
+    background: rgba(255, 248, 232, 1);
+    justify-content: center;
+    align-items: center;
+}
+.middle hr{
+    margin: 0px auto;
+    width:50%;
+}
+
+.album{
+    width:400px;
+    height: 500px;
+    overflow: hidden;
+}
+.slide-quiz{
+    margin: 0 auto;
+    position:relative;
+    display:flex;
+    height: 500px;
+}
+
+.quiz{
+    width:400px;
+    height: 500px;
+    margin:0 auto;
+    display: flex;
+    align-items: center; /* 수직 정렬 */
+    flex-direction: column; /* default: row */
+    padding-top: 30px;
+}
+
+.question input{
+    width:400px;
+    margin: 30px 0;
+    font-size: 25px;
+    border:none;
+    outline:none;
+    background: rgba(255, 248, 232, 1);
+}
+.question span{
+     font-size: 30px;
+}
+
+.example input{
+
+    margin:20px 0;
+    padding:4px;
+    font-size: 20px;
+    border:none;
+    outline:none;
+    background: rgba(255, 248, 232, 1);
+}
+.example span{
+    font-size: 20px;
+}
+.button-box button{
+    font-size: 20px;
+    margin: 15px 30px;
+}
+.preview{
+    float:left;
+}
+.next{
+    float:right;
+}
+.footer{
+    text-align: center;
+}
+
+.footer button{
+    font-size: 20px;
+    margin: 30px 70px;
+    padding:10px;
+}
