@@ -46,14 +46,32 @@ class TestView(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual("퀴즈만들기", soup.title.text)
 
-    # 퀴즈 1개 생성
-    def test_create_quiz(self):
+    # todo: 퀴즈 생성 & 비공개여부
+    # 퀴즈 1개 생성-공개일경우
+    def test_create_quiz_public(self):
         # Given
-        data = {"title": "올바른 quiz입니다."}
+        title = "mj의 퀴즈퀴즈퀴즈~!!! 나를 맞춰봐"
+        private = False
+
         # when
-        create_quiz(self.user, data)
+        create_quiz(self.user, title, private)
+
         # then
-        self.assertEqual(Quiz.objects.last().title, data["title"])  # quiz생성
+        self.assertEqual(Quiz.objects.last().title, title)  # quiz 생성
+        self.assertEqual(Quiz.objects.last().private, private)  # 공개 확인
+
+    # 퀴즈 1개 생성-비공개일경우
+    def test_create_quiz_private(self):
+        # Given
+        title = "mj의 퀴즈퀴즈퀴즈~!!! 나를 맞춰봐"
+        private = True
+
+        # when
+        create_quiz(self.user, title, private)
+
+        # then
+        self.assertEqual(Quiz.objects.last().title, title)  # quiz 생성
+        self.assertEqual(Quiz.objects.last().private, private)  # 공개 확인
 
     # 퀴즈에 문제 1개 생성
     def test_create_one_question_in_quiz(self):
