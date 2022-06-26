@@ -73,7 +73,7 @@ class TestView(TestCase):
         self.assertEqual(Quiz.objects.last().title, title)  # quiz 생성
         self.assertEqual(Quiz.objects.last().private, private)  # 공개 확인
 
-    # 퀴즈에 문제 1개 생성
+    # todo: 퀴즈에 문제 1개 생성
     def test_create_one_question_in_quiz(self):
         # Given
         # 퀴즈 1개 생성 & 문제생성시 필요한 데이터
@@ -81,23 +81,24 @@ class TestView(TestCase):
         self.question_no_001 = (
             QuizQuestion.objects.filter(quiz=self.quiz_001).count() + 1
         )
+        # 문제내용
+        content = "내가 좋아하는 계절은?"
 
-        data = {
-            "question_content": "내가 좋아하는 계절은?",
-        }
         # When
         # 문제 생성함수
-        create_question(self.quiz_001, self.question_no_001, data)
+        create_question(self.quiz_001, self.question_no_001, content)
 
         # Then
         """
-        1. 문제가 생성되었는지
-        2. 퀴즈가 동일한지
-        3. 퀴즈의 문제개수가 10개 이하인지
+        1. 퀴즈가 동일한지
+        2. 퀴즈의 번호가 동일한지
+        3. 퀴즈의 번호가 1번인지
+        4. 퀴즈의 내용이 동일한지
         """
-        # self.assertEqual(success['message'],"success")
         self.assertEqual(QuizQuestion.objects.last().quiz, self.quiz_001)
-        self.assertTrue(QuizQuestion.objects.filter(quiz=self.quiz_001).count() <= 10)
+        self.assertEqual(QuizQuestion.objects.last().no, self.question_no_001)
+        self.assertTrue(QuizQuestion.objects.last().no == 1)
+        self.assertEqual(QuizQuestion.objects.last().content, content)
 
     # 문제 하나에 보기 4개 생성후 개수 확인
     def test_create_four_examples_in_one_question_in_quiz(self):
