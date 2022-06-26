@@ -15,25 +15,36 @@ class TestView(TestCase):
     def setUp(self):
         self.client = Client()
         # 사용자
-        self.user = User.objects.create_user("mj", "password")
+        self.user = User.objects.create_user(username="mj", password="my_password")
 
-    # 로그인여부 확인
-    # def test_check_login(self):
-    #     # When
-    #     login = self.client.login(username="mj", password="password")
-    #     # Then
-    #     self.assertFalse(login)  # 아직 로그인 구현 안함
-
-    # 퀴즈생성 페이지 이동
-    def test_enter_quiz_page(self):
+    # TODO:로그인여부 확인
+    # 퀴즈생성 페이지 이동시 로그인 하지 않은 사용자는 메인 페이지로 이동
+    def test_not_logged_user_enter_main_page(self):
         # Given
-        self.client.login(username=self.user.username, password=self.user.password)
         response = self.client.get("/you-qui-es/")
         # when
         soup = BeautifulSoup(response.content, "html.parser")
         # then
         self.assertEqual(response.status_code, 200)
-        self.assertEqual("퀴즈", soup.title.text)
+        self.assertEqual("메인", soup.title.text)
+
+    # 로그인되었을경우
+    def test_check_login(self):
+        # When
+        login = self.client.login(username="mj", password="my_password")
+        # Then
+        self.assertTrue(login)
+
+    # 퀴즈생성 페이지 이동시 로그인 한 사용자는 퀴즈생성 페이지로 정상적으로 이동
+    def test_logged_user_enter_quiz_page(self):
+        # Given
+        self.client.login(username="mj", password="my_password")
+        response = self.client.get("/you-qui-es/")
+        # when
+        soup = BeautifulSoup(response.content, "html.parser")
+        # then
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual("퀴즈만들기", soup.title.text)
 
     # 퀴즈 1개 생성
     def test_create_quiz(self):
