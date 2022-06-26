@@ -1,5 +1,3 @@
-from django.contrib.auth.models import User
-from django.http import JsonResponse
 from django.shortcuts import redirect, render
 
 from my_quiz.models import Quiz
@@ -64,7 +62,7 @@ def create_my_quiz(request):
     user = request.user
     print(user)
     if user.is_authenticated:  # 로그인하면
-        if request.method == "POST": #POST
+        if request.method == "POST":  # POST
 
             # todo: 퀴즈생성
             title = request.POST.get("title")
@@ -76,7 +74,6 @@ def create_my_quiz(request):
                 # todo: 문제생성
                 question_content = request.POST.get(f"question{question_no}")
                 question = create_question(quiz, question_no, question_content)
-
 
                 # todo: 보기생성
                 example1 = request.POST.get(f"q{question_no}_1")
@@ -93,12 +90,12 @@ def create_my_quiz(request):
                 }
                 create_example(question, data)
 
-            return render(request,"done_quiz.html")
+            return render(request, "done_quiz.html")
 
-        else: #GET
+        else:  # GET
             return render(request, "make_quiz.html")
 
-    else: #로그인하지 않으면
+    else:  # 로그인하지 않으면
         return render(request, "main.html", {"messages": "로그인을 해주세요."})
 
 
