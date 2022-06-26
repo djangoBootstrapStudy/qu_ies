@@ -22,8 +22,10 @@ class TestView(TestCase):
     def test_not_logged_user_enter_main_page(self):
         # Given
         response = self.client.get("/you-qui-es/")
+
         # when
         soup = BeautifulSoup(response.content, "html.parser")
+
         # then
         self.assertEqual(response.status_code, 200)
         self.assertEqual("메인", soup.title.text)
@@ -32,6 +34,7 @@ class TestView(TestCase):
     def test_check_login(self):
         # When
         login = self.client.login(username="mj", password="my_password")
+
         # Then
         self.assertTrue(login)
 
@@ -40,8 +43,10 @@ class TestView(TestCase):
         # Given
         self.client.login(username="mj", password="my_password")
         response = self.client.get("/you-qui-es/")
+
         # when
         soup = BeautifulSoup(response.content, "html.parser")
+
         # then
         self.assertEqual(response.status_code, 200)
         self.assertEqual("퀴즈만들기", soup.title.text)
