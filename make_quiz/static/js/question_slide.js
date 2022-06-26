@@ -19,15 +19,15 @@ function prev(){
     }
 }
 function next(){
-    if(quizIndex<9){
+    if (quizIndex < 9) {
         btnPrevious.removeAttribute("disabled")
-        position-=quiz_width;
+        position -= quiz_width;
         quiz.style.transform = `translateX(${position}px)`;
-        quizIndex=quizIndex+1;
+        quizIndex = quizIndex + 1;
 
     }
-    if (quizIndex == 9){
-        btnNext.setAttribute('disabled','true')
+    if (quizIndex == 9) {
+        btnNext.setAttribute('disabled', 'true')
 
     }
 }
