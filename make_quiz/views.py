@@ -90,7 +90,7 @@ def create_my_quiz(request):
                 }
                 create_example(question, data)
 
-            return render(request, "done_quiz.html",{'quiz_title':title})
+            return redirect(f"/done-qui-es/{quiz.pk}/")
 
         else:  # GET
             return render(request, "make_quiz.html")
