@@ -10,7 +10,7 @@ from .views import create_example, create_question, create_quiz
 
 # Create your tests here.
 # create_quiz test
-class TestView(TestCase):
+class CreateQuizTestView(TestCase):
     # SetUP
     def setUp(self):
         self.client = Client()
@@ -62,7 +62,7 @@ class TestView(TestCase):
         create_quiz(self.user, title, private)
 
         # then
-        self.assertEqual(Quiz.objects.last().title, title)  # quiz 생성
+        self.assertEqual(Quiz.objects.last().title, title)  # quiz 생성 확인
         self.assertEqual(Quiz.objects.last().private, private)  # 공개 확인
 
     # 퀴즈 1개 생성-비공개일경우
@@ -75,7 +75,7 @@ class TestView(TestCase):
         create_quiz(self.user, title, private)
 
         # then
-        self.assertEqual(Quiz.objects.last().title, title)  # quiz 생성
+        self.assertEqual(Quiz.objects.last().title, title)  # quiz 생성 확인
         self.assertEqual(Quiz.objects.last().private, private)  # 공개 확인
 
     # todo: 퀴즈에 문제 1개 생성
