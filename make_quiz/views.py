@@ -99,5 +99,10 @@ def create_my_quiz(request):
         return render(request, "main.html", {"messages": "로그인을 해주세요."})
 
 
+def done_my_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    return render(request, "done_quiz.html", {"quiz_title": quiz.title})
+
+
 def main(request):
     return render(request, "main.html")
