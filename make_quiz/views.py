@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 
 from my_quiz.models import Quiz
@@ -7,69 +6,103 @@ from .models import QuizExample, QuizQuestion
 
 
 # Create your views here.
-def create_quiz(user, data):
-    return Quiz.objects.create(author=user, title=data["title"])
+# todo: 퀴즈생성 함수
+def create_quiz(user, title, private):
+    if private:  # True이면 비공개 설정
+        return Quiz.objects.create(author=user, title=title, private=private)
+    else:  # False이면 공개설정 default=False
+        return Quiz.objects.create(author=user, title=title)
 
 
-def create_question(quiz, no, data):
-    return QuizQuestion.objects.create(
-        quiz=quiz,
-        no=no,
-        content=data["question_content"],
+# todo: 문제생성 함수
+def create_question(quiz, question_no, content):
+    return QuizQuestion.objects.create(quiz=quiz, no=question_no, content=content)
+
+
+# todo: 보기생성 함수
+def create_example(question, data):
+    # print(data["example1"]["no"])
+    # print(data["example1"]["content"])
+
+    QuizExample.objects.bulk_create(
+        [
+            QuizExample(
+                question=question,
+                no=data["example1"]["no"],
+                content=data["example1"]["content"],
+                answer=False,
+            ),
+            QuizExample(
+                question=question,
+                no=data["example2"]["no"],
+                content=data["example2"]["content"],
+                answer=False,
+            ),
+            QuizExample(
+                question=question,
+                no=data["example3"]["no"],
+                content=data["example3"]["content"],
+                answer=False,
+            ),
+            QuizExample(
+                question=question,
+                no=data["example4"]["no"],
+                content=data["example4"]["content"],
+                answer=False,
+            ),
+        ]
     )
 
-
-def create_example(question, no, data):
-    QuizExample.objects.create(
-        question=question,
-        no=no,
-        content=data[f"example{no}"],
-    )
-    return
+    quiz_answer = QuizExample.objects.get(question=question, no=data["answer"]["no"])
+    quiz_answer.answer = True
+    quiz_answer.save()
 
 
-def create(request):
-    if request.method == "POST":
-        user = request.user
-        if user.is_authenticated:  # 로그인하면
+def create_my_quiz(request):
+    user = request.user
+    print(user)
+    if user.is_authenticated:  # 로그인하면
+        if request.method == "POST":  # POST
+
+            # todo: 퀴즈생성
             title = request.POST.get("title")
-            question_content = request.POST.get("question")
-            example1 = request.POST.get("example1")
-            example2 = request.POST.get("example2")
-            example3 = request.POST.get("example3")
-            example4 = request.POST.get("example4")
+            private = request.POST.get("flexCheckDefault")
+            quiz = create_quiz(user, title, private)
 
-            data = {
-                # quiz
-                "title": title,
-                # question
-                "question_content": question_content,
-                # example
-                "example1": example1,
-                "example2": example2,
-                "example3": example3,
-                "example4": example4,
-            }
+            for question_no in range(1, 11):
 
-            # 퀴즈
-            quiz = create_quiz(user, data)
+                # todo: 문제생성
+                question_content = request.POST.get(f"question{question_no}")
+                question = create_question(quiz, question_no, question_content)
 
-            # 문제
-            qustion_no = QuizQuestion.objects.filter(quiz=quiz).count() + 1
-            question = create_question(quiz, qustion_no, data)
+                # todo: 보기생성
+                example1 = request.POST.get(f"q{question_no}_1")
+                example2 = request.POST.get(f"q{question_no}_2")
+                example3 = request.POST.get(f"q{question_no}_3")
+                example4 = request.POST.get(f"q{question_no}_4")
+                answer = request.POST.get(f"example{question_no}")
+                data = {
+                    "example1": {"no": 1, "content": example1},
+                    "example2": {"no": 2, "content": example2},
+                    "example3": {"no": 3, "content": example3},
+                    "example4": {"no": 4, "content": example4},
+                    "answer": {"no": answer},
+                }
+                create_example(question, data)
 
-            # 보기4개
-            for i in range(4):
-                example_no = QuizExample.objects.filter(question=question).count() + 1
-                create_example(question, example_no, data)
+            return redirect(f"/done-qui-es/{quiz.pk}/")
 
-            return redirect("/done-qui-es/")  # 여기서 return 이면 test가 달라짐
-        else:
-            return render(request, "make_quiz.html", {"message": "로그인을 해주세요"})
+        else:  # GET
+            return render(request, "make_quiz.html")
 
-    else:
-        return render(request, "make_quiz.html")
+    else:  # 로그인하지 않으면
+        return render(request, "main.html", {"messages": "로그인을 해주세요."})
 
 
-def done(request):
-    return render(request, "done_quiz.html")
+def done_my_quiz(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    return render(request, "done_quiz.html", {"quiz_title": quiz.title})
+
+
+def main(request):
+    return render(request, "main.html")

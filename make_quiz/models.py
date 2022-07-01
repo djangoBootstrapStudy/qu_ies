@@ -10,7 +10,7 @@ class QuizQuestion(models.Model):
     content = models.CharField("문제내용", max_length=250)
 
     def __str__(self):
-        return f"문제{self.no}번"
+        return f"{self.quiz}-문제{self.no}번"
 
 
 class QuizExample(models.Model):

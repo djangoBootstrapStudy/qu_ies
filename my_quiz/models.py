@@ -8,7 +8,9 @@ class Quiz(models.Model):
     title = models.CharField(max_length=50)  # 최대 길이 50
     hit = models.PositiveIntegerField(default=0)  # 조회 수
 
-    private = models.BooleanField(null=True)  # 체크를 안하면 Public, 체크하면 Private
+    private = models.BooleanField(
+        default=False
+    )  # 체크를 안하면(False) Public(공개), 체크하면(True) Private(비공개)
 
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
