@@ -1,0 +1,39 @@
+hr{
+    width:50%;
+    margin: 0px auto;
+}
+.logo{
+    width: 150px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    font-size: 70px ;
+}
+body{
+    background: rgba(255, 248, 232, 1);
+}
+.middle{
+    /*background: blue;*/
+    height:600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.quiz-title{
+    font-size: 50px;
+    font-weight: bolder;
+    color: deepskyblue;
+    margin: 10px;
+}
+.signup-form{
+    text-align: center;
+}
+.signup-btn{
+    font-size: 20px;
+    border: 2px dashed grey;
+    background: rgba(255, 248, 232, 1);
+}
+
