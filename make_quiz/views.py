@@ -1,5 +1,4 @@
 from django.shortcuts import redirect, render
-
 from my_quiz.models import Quiz
 
 from .models import QuizExample, QuizQuestion
@@ -104,5 +103,3 @@ def done_my_quiz(request, pk):
     return render(request, "done_quiz.html", {"quiz_title": quiz.title})
 
 
-def main(request):
-    return render(request, "main.html")
