@@ -93,7 +93,7 @@ def create_my_quiz(request):
             return redirect(f"/done-qui-es/{quiz.pk}/")
 
         else:  # GET
-            return render(request, "make_quiz.html")
+            return render(request, "make_quiz/make_quiz.html")
 
     else:  # 로그인하지 않으면
         return render(request, "main.html", {"messages": "로그인을 해주세요."})
@@ -101,4 +101,4 @@ def create_my_quiz(request):
 
 def done_my_quiz(request, pk):
     quiz = Quiz.objects.get(pk=pk)
-    return render(request, "done_quiz.html", {"quiz_title": quiz.title})
+    return render(request, "make_quiz/done_quiz.html", {"quiz_title": quiz.title})
