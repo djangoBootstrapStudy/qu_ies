@@ -4,6 +4,7 @@ from django.test import Client, TestCase
 
 from make_quiz.models import QuizExample, QuizQuestion
 from my_quiz.models import Quiz
+from solve_quiz.views import random_saying
 
 
 # Create your tests here.
@@ -72,6 +73,17 @@ class SolveQuizTestView(TestCase):
         )  # quiz의 문제 출제자 확인
 
     # 3. 필적확인란 랜덤 명언 값 존재하는지 확인하기
+    def test_quiz_start_random_saying_check(self):
+        # Given
+        response = self.client.get(self.quiz_001.get_absolute_url())
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+        saying = soup.find("div", id="random_saying")
+
+        # Then
+        self.assertIn(saying.text, random_saying())
+
     # 4. 시작하기 버튼
     #   시작하기 버튼 누르면 성명, 응시일자 저장되는지 확인
     #   시작하기 버튼 누르면 필적확인란 값 일치하는지 확인
