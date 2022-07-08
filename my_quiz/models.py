@@ -25,7 +25,7 @@ class Quiz(models.Model):
     # TODO : get_absolute_url 정의하기
     def get_absolute_url(self):
         """모델의 레코드 URL 생성 규칙을 정의함"""
-        return f"/my-qui-es/{self.pk}/"
+        return f"/qui-es/{self.pk}/"
 
     class Meta:
         verbose_name_plural = "Quizzes"  # 정확한 복수으로 수정
