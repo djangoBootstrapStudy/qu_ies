@@ -4,7 +4,6 @@ from django.test import Client, TestCase
 
 from make_quiz.models import QuizExample, QuizQuestion
 from my_quiz.models import Quiz
-from solve_quiz.views import random_saying
 
 
 # Create your tests here.
@@ -76,13 +75,18 @@ class SolveQuizTestView(TestCase):
     def test_quiz_start_random_saying_check(self):
         # Given
         response = self.client.get(self.quiz_001.get_absolute_url())
+        sayings = [
+            "늦었다고 생각할 때가 진짜 너무 늦었다",
+            "내일도 할 수 있는 일을 굳이 오늘 할 필요는 없다",
+            "길이 없으면 길을 찾아라, 찾아도 없으면 길을 닦아나가라",
+        ]
 
         # When
         soup = BeautifulSoup(response.content, "html.parser")
         saying = soup.find("div", id="random_saying")
 
         # Then
-        self.assertIn(saying.text, random_saying())
+        self.assertIn(saying.text, sayings)
 
     # 4. 시작하기 버튼
     #   시작하기 버튼 누르면 성명, 응시일자 저장되는지 확인
