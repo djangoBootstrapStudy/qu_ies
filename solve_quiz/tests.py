@@ -41,18 +41,17 @@ class SolveQuizTestView(TestCase):
             self.quizexample_answer.answer = True
             self.quizexample_answer.save()
 
-        self.quiz_001_url = f"/qui-es/{self.quiz_001.pk}"
-
     # TODO: 문제 시작하기 페이지 이동했을경우 quiz_start 페이지 확인
     # 1. 로그인 확인 여부없이 quiz_start 페이지로 이동 확인
     def test_enter_quiz_start(self):
         # Given
-        response = self.client.get(self.quiz_001_url)
+        response = self.client.get(self.quiz_001.get_absolute_url())
 
         # When
         soup = BeautifulSoup(response.content, "html.parser")
 
         # Then
+        self.assertEqual(self.quiz_001.get_absolute_url(), "/qui-es/1/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual("문제 시작 페이지", soup.title.text)
 
