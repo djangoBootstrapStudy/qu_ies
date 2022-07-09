@@ -139,6 +139,7 @@ class StartQuizTestView(TestCase):
         # Then
         self.assertEqual(post_response.url, "/qui-es/1/solving/")
 
+
 class SolveQuizTestView(TestCase):
 
     # TODO: SetUp
@@ -174,14 +175,14 @@ class SolveQuizTestView(TestCase):
             self.quizexample_answer.save()
 
         # quiz_001_url
-        self.quiz_001_url = f'/qui-es/{self.quiz_001.pk}/solving/'
+        self.quiz_001_url = f"/qui-es/{self.quiz_001.pk}/solving/"
 
         # 퀴즈시작페이지에서 session추가
         self.data = {
-            'tester-name': '퀴즈가 좋아!',
+            "tester-name": "퀴즈가 좋아!",
             "test-date": date.today(),
-            "follow-saying": '필적확인란',
-            "saying": '필적확인란',
+            "follow-saying": "필적확인란",
+            "saying": "필적확인란",
         }
         self.client.post(self.quiz_001.get_absolute_url(), self.data)
 
@@ -199,8 +200,21 @@ class SolveQuizTestView(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual("문제 풀기 페이지", soup.title.text)
 
-    # 1. quiz의 테스트 제목, 출제자 확인
-    # 2. 응시자의 성명, 응시일자 정보 존재여부 확인
+    # 2. info(응시자, 응시일자 정보) 존재여부 확인
+    def test_quiz_solve_page_get_info_in_session_check(self):
+        # Given
+        self.client.get(self.quiz_001_url)
+        session = self.client.session
+
+        # When
+        """세션가져오기"""
+        tester_name = session["tester_name"]
+        test_date = session["test_date"]
+
+        # Then
+        self.assertEqual(tester_name, session["tester_name"])  # 응시자
+        self.assertEqual(test_date, session["test_date"])  # 응시일자
+
     # 3. quiz의 문제수 10개인지 확인, 문제 일치 확인
     # 4. quiz의 보기수 40개인지 확인, 각 문제 보기 1번 확인
     # 5. 선택한 답의 수가 완료문항수와 같은지 확인
