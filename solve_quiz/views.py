@@ -20,7 +20,7 @@ def random_saying():
 
 
 # Create your views here.
-def solve_quiz(request, pk):
+def start_quiz(request, pk):
     if request.method == "GET":  # get일경우
         quiz = Quiz.objects.get(id=pk)
         saying = random_saying()
@@ -46,7 +46,11 @@ def solve_quiz(request, pk):
             request.session["tester_name"] = tester_name
             request.session["test_date"] = test_date
 
-            return render(request, "solve_quiz/quiz.html")
+            return redirect(f"/qui-es/{pk}/solving/")
         # Todo:필적확인란 불일치하면 quiz_start 페이지 redirect
         else:
             return redirect(f"/qui-es/{pk}/")
+
+
+def solve_quiz(request, pk):
+    return render(request, "solve_quiz/quiz.html")
