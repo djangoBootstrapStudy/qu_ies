@@ -43,7 +43,7 @@ class SolveQuizTestView(TestCase):
             self.quizexample_answer.answer = True
             self.quizexample_answer.save()
 
-    # TODO: 문제 시작하기 페이지 이동했을경우 quiz_start 페이지 확인
+    # TODO: 문제 시작하기 페이지 이동했을경우 quiz_start 페이지 확인(GET)
     # 1. 로그인 확인 여부없이 quiz_start 페이지로 이동 확인
     def test_enter_quiz_start(self):
         # Given
