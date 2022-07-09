@@ -254,7 +254,25 @@ class SolveQuizTestView(TestCase):
             question_div = soup.find("div", id=f"question{question_num}")
             self.assertEqual(question_div.text, f"문제{question_num}번 내용")
 
-    # 5. quiz의 보기수 40개인지 확인, 각 문제 보기 1번 확인
+    # 5. quiz의 보기수 40개인지 확인, 문제 1,10번만 보기확인
+    def test_quiz_solve_page_get_example_check(self):
+        # Given
+        response = self.client.get(self.quiz_001_url)
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+        all_example_div = soup.find_all("div", id="example")
+
+        # Then
+        self.assertEqual(all_example_div.count(), 40)
+        for example_num in range(1, 4):
+            no1_example_div = soup.find("div", id=f"q1_{example_num}")
+            self.assertEqual(no1_example_div.text, f"문제1-보기{example_num}번 내용")
+
+        for example_num in range(1, 4):
+            no10_example_div = soup.find("div", id=f"q10_{example_num}")
+            self.assertEqual(no10_example_div.text, f"문제10-보기{example_num}번 내용")
+
     # 6. 선택한 답의 수가 완료문항수와 같은지 확인
 
     # TODO: 버튼 확인
