@@ -235,8 +235,27 @@ class SolveQuizTestView(TestCase):
         self.assertEqual(self.quiz_001.title, quiz_title.text)
         self.assertEqual(self.quiz_001.author.username, quiz_author.text)
 
-    # 4. quiz의 보기수 40개인지 확인, 각 문제 보기 1번 확인
-    # 5. 선택한 답의 수가 완료문항수와 같은지 확인
+    # 4. quiz의 문제수 10개인지 확인, 문제 일치 확인
+    def test_quiz_solve_page_get_question_check(self):
+        # Given
+        response = self.client.get(self.quiz_001_url)
+        quiz_question = QuizQuestion.objects.filter(quiz=self.quiz_001)
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        # Then
+        """
+        퀴즈의 문제개수 10개인지 확인
+        퀴즈의 문제내용 일치하는지 10개 모두 확인(for문돌리기)
+        """
+        self.assertEqual(quiz_question.count(), 10)
+        for question_num in range(1, 11):
+            question_div = soup.find("div", id=f"question{question_num}")
+            self.assertEqual(question_div.text, f"문제{question_num}번 내용")
+
+    # 5. quiz의 보기수 40개인지 확인, 각 문제 보기 1번 확인
+    # 6. 선택한 답의 수가 완료문항수와 같은지 확인
 
     # TODO: 버튼 확인
     # 1. 그만두기 버튼 누르면 메인페이지로 이동 확인
