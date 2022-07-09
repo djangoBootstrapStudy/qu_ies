@@ -5,7 +5,21 @@
     <title>문제 시작 페이지</title>
 </head>
 <body>
-    <div id="quiz_title">{{ quiz.title }}</div>
-    <div id="quiz_author">{{ quiz.author }}</div>
+<form name="frm" action="" method="post">
+    {% csrf_token %}
+    <div id="quiz-title">{{ quiz.title }}</div>
+    <div id="quiz-author">{{ quiz.author }}</div>
+    <div id="random-saying">{{ saying }}</div>
+
+    <input type="text" name="tester-name" placeholder="응시자 이름을 입력해주세요">
+    <input type="date" id="test-date" name="test-date" placeholder="응시날짜를 입력해주세요">
+    <input type="text" id="saying" name="follow-saying" placeholder="따라 써주세요">
+    <input type="hidden" name="saying" value="{{ saying }}">
+
+
+    <div class="footer">
+        <input type="submit" class="btn btn-light" id="start-btn" value="시작하기"/>
+    </div>
+</form>
 </body>
 </html>
