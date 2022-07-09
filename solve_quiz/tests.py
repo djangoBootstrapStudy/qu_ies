@@ -139,7 +139,66 @@ class StartQuizTestView(TestCase):
         # Then
         self.assertEqual(post_response.url, "/qui-es/1/solving/")
 
-    # TODO: 문제풀기 페이지로 이동했을경우 quiz_solve 페이지 확인
+class SolveQuizTestView(TestCase):
+
+    # TODO: SetUp
+    # 퀴즈, 문제, 보기 생성
+    def setUp(self):
+        self.client = Client()
+
+        # 유저
+        self.user = User.objects.create(username="LoveQuiz", password="lovequiz1234")
+
+        # 퀴즈 1개
+        self.quiz_001 = Quiz.objects.create(author=self.user, title="나를 맞춰봐!")
+
+        # 문제 10개
+        for question_num in range(1, 11):
+            self.quiz_001_question = QuizQuestion.objects.create(
+                quiz=self.quiz_001, no=question_num, content=f"문제{question_num}번 내용"
+            )
+
+            # 한 문제당 보기 4개
+            for example_num in range(1, 5):
+                QuizExample.objects.create(
+                    question=self.quiz_001_question,
+                    no=example_num,
+                    content=f"문제{question_num}-보기{example_num}번 내용",
+                )
+
+            # 답(무조건 1번)
+            self.quizexample_answer = QuizExample.objects.get(
+                question=self.quiz_001_question, no=1
+            )
+            self.quizexample_answer.answer = True
+            self.quizexample_answer.save()
+
+        # quiz_001_url
+        self.quiz_001_url = f'/qui-es/{self.quiz_001.pk}/solving/'
+
+        # 퀴즈시작페이지에서 session추가
+        self.data = {
+            'tester-name': '퀴즈가 좋아!',
+            "test-date": date.today(),
+            "follow-saying": '필적확인란',
+            "saying": '필적확인란',
+        }
+        self.client.post(self.quiz_001.get_absolute_url(), self.data)
+
+    # TODO: 문제풀기 페이지로 이동했을경우 quiz_solve 페이지 확인(GET)
+    # 1. 퀴즈 문제 풀기 페이지 이동
+    def test_enter_quiz_solve_page(self):
+        # Given
+        response = self.client.get(self.quiz_001_url)
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        # Then
+        self.assertEqual(self.quiz_001_url, "/qui-es/1/solving/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual("문제 풀기 페이지", soup.title.text)
+
     # 1. quiz의 테스트 제목, 출제자 확인
     # 2. 응시자의 성명, 응시일자 정보 존재여부 확인
     # 3. quiz의 문제수 10개인지 확인, 문제 일치 확인
