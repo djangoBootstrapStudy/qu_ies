@@ -8,10 +8,13 @@ from .models import QuizExample, QuizQuestion
 # Create your views here.
 # todo: 퀴즈생성 함수
 def create_quiz(user, title, private):
-    if private:  # True이면 비공개 설정
-        return Quiz.objects.create(author=user, title=title, private=private)
-    else:  # False이면 공개설정 default=False
-        return Quiz.objects.create(author=user, title=title)
+    quiz = Quiz.objects.create(author=user, title=title)
+
+    if private:  # True(비공개설정)
+        quiz.private = True
+        quiz.save()
+
+    return quiz
 
 
 # todo: 문제생성 함수
@@ -21,41 +24,36 @@ def create_question(quiz, question_no, content):
 
 # todo: 보기생성 함수
 def create_example(question, data):
-    # print(data["example1"]["no"])
-    # print(data["example1"]["content"])
-
     QuizExample.objects.bulk_create(
         [
             QuizExample(
                 question=question,
                 no=data["example1"]["no"],
                 content=data["example1"]["content"],
-                answer=False,
             ),
             QuizExample(
                 question=question,
                 no=data["example2"]["no"],
                 content=data["example2"]["content"],
-                answer=False,
             ),
             QuizExample(
                 question=question,
                 no=data["example3"]["no"],
                 content=data["example3"]["content"],
-                answer=False,
             ),
             QuizExample(
                 question=question,
                 no=data["example4"]["no"],
                 content=data["example4"]["content"],
-                answer=False,
             ),
         ]
     )
 
-    quiz_answer = QuizExample.objects.get(question=question, no=data["answer"]["no"])
-    quiz_answer.answer = True
-    quiz_answer.save()
+    quizexample_answer = QuizExample.objects.get(
+        question=question, no=data["answer"]["no"]
+    )
+    quizexample_answer.answer = True
+    quizexample_answer.save()
 
 
 def create_my_quiz(request):
