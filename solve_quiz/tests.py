@@ -78,21 +78,17 @@ class SolveQuizTestView(TestCase):
         self.assertEqual(self.quiz_001.author.username, quiz_author.text)
 
     # 3. 필적확인란 랜덤 명언 값 존재하는지 확인하기
-    def test_quiz_start_random_saying_check(self):
+    def test_quiz_start_get_random_saying_check(self):
         # Given
         response = self.client.get(self.quiz_001.get_absolute_url())
-        sayings = [
-            "늦었다고 생각할 때가 진짜 너무 늦었다",
-            "내일도 할 수 있는 일을 굳이 오늘 할 필요는 없다",
-            "길이 없으면 길을 찾아라, 찾아도 없으면 길을 닦아나가라",
-        ]
 
         # When
         soup = BeautifulSoup(response.content, "html.parser")
-        saying = soup.find("div", id="random_saying")
+        saying = soup.find("div", id="random-saying")
 
         # Then
-        self.assertIn(saying.text, sayings)
+        '''response로 보낸 명언과 html의 명언 일치확인'''
+        self.assertEqual(response.context['saying'], saying.text)
 
     # TODO: 문제 시작하기 페이지 이동했을경우 quiz_start 페이지 확인(POST)
     # 1. 시작하기 버튼 누르면 필적확인란 값이 다를경우 재로드 확인
