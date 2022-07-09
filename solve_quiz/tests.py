@@ -9,7 +9,7 @@ from my_quiz.models import Quiz
 
 
 # Create your tests here.
-class SolveQuizTestView(TestCase):
+class StartQuizTestView(TestCase):
 
     # TODO: SetUp
     # 퀴즈 하나 만들기
