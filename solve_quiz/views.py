@@ -2,6 +2,7 @@ import random
 
 from django.shortcuts import redirect, render
 
+from make_quiz.models import QuizExample, QuizQuestion
 from my_quiz.models import Quiz
 
 
@@ -53,4 +54,11 @@ def start_quiz(request, pk):
 
 
 def solve_quiz(request, pk):
+    tester_name = request.session["tester_name"]
+    if tester_name is not None:  # 세션이 있을경우
+        if request.method == "GET":
+            quiz = Quiz.objects.get(id=pk)
+            return render(request, "solve_quiz/quiz.html", {"quiz": quiz})
+    else:  # 세션이 없을경우
+        return redirect(f"/qui-es/{pk}/")
     return render(request, "solve_quiz/quiz.html")
