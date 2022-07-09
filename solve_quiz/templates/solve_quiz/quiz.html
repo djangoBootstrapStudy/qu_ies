@@ -9,7 +9,7 @@
     <div id="quiz-author">{{ quiz.author }}</div>
     {% for question in questions %}
         <div class="quiz">
-            <div class="question">
+            <div class="question" id="question">
                 <span>Q{{ question.no }}.</span>
                 <div id="question{{ question.no }}">{{ question.content }}</div>
             </div>
