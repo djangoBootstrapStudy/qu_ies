@@ -115,6 +115,32 @@ class SolveQuizTestView(TestCase):
         self.assertEqual("문제 시작 페이지", soup.title.text)
 
     # 2. 시작하기 버튼 누르면 필적확인란이 같을경우 응시자와 오늘날짜가 session에 들어가는지 확인
+    def test_quiz_start_page_post_same_saying_tester_and_today_in_session_check(self):
+        # Given
+        response = self.client.get(self.quiz_001.get_absolute_url())
+        saying = response.context["saying"]
+
+        data = {
+            "tester-name": self.user.username,
+            "test-date": date.today(),
+            "follow-saying": saying,
+            "saying": saying,
+        }
+
+        # When
+        self.client.post(self.quiz_001.get_absolute_url(), data)
+        session = self.client.session
+        tester_name = session["tester_name"]
+        test_date = session["test_date"]
+
+        # Then
+        """
+        세션에 저장된 응시자 성명 확인
+        세션에 저장된 응시일자가 오늘인지 확인
+        """
+        self.assertEqual(tester_name, data["tester-name"])
+        self.assertEqual(test_date, data["test-date"].strftime("%Y-%m-%d"))
+
     # 3. 시작하기 버튼 누르면 필적확인란이 같을경우 quiz_solve 페이지로 이동 확인
 
     # TODO: 문제풀기 페이지로 이동했을경우 quiz_solve 페이지 확인
