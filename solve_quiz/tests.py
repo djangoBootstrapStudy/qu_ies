@@ -264,7 +264,12 @@ class SolveQuizTestView(TestCase):
         all_example_div = soup.find_all("div", id="example")
 
         # Then
-        self.assertEqual(all_example_div.count(), 40)
+        """
+        보기개수가 총 40개인지 확인(문제10*보기4)
+        문제 1번의 보기내용이 일치한지 확인(for문)
+        문제 10번의 보기내용이 일치한지 확인(for문)
+        """
+        self.assertEqual(len(all_example_div), 40)
         for example_num in range(1, 4):
             no1_example_div = soup.find("div", id=f"q1_{example_num}")
             self.assertEqual(no1_example_div.text, f"문제1-보기{example_num}번 내용")
