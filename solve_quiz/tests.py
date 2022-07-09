@@ -142,6 +142,23 @@ class SolveQuizTestView(TestCase):
         self.assertEqual(test_date, data["test-date"].strftime("%Y-%m-%d"))
 
     # 3. 시작하기 버튼 누르면 필적확인란이 같을경우 quiz_solve 페이지로 이동 확인
+    def test_quiz_start_page_post_same_saying_enter_quiz_page(self):
+        # Given
+        get_response = self.client.get(self.quiz_001.get_absolute_url())
+        saying = get_response.context["saying"]
+
+        data = {
+            "tester-name": self.user.username,
+            "test-date": date.today(),
+            "follow-saying": saying,
+            "saying": saying,
+        }
+
+        # When
+        post_response = self.client.post(self.quiz_001.get_absolute_url(), data)
+
+        # Then
+        self.assertEqual(post_response.url, "/qui-es/1/solving/")
 
     # TODO: 문제풀기 페이지로 이동했을경우 quiz_solve 페이지 확인
     # 1. quiz의 테스트 제목, 출제자 확인
