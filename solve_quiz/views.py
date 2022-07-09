@@ -37,6 +37,15 @@ def solve_quiz(request, pk):
 
         # Todo: 필적확인란이 일치하면 세션 저장 후 quiz페이지
         if follow_saying == saying:
+
+            tester_name = request.POST["tester-name"]
+            test_date = request.POST["test-date"]
+            print(test_date)
+
+            """세션을 이용해 응시자 정보 저장"""
+            request.session["tester_name"] = tester_name
+            request.session["test_date"] = test_date
+
             return render(request, "solve_quiz/quiz.html")
         # Todo:필적확인란 불일치하면 quiz_start 페이지 redirect
         else:
