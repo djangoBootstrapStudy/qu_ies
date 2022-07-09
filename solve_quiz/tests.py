@@ -243,13 +243,14 @@ class SolveQuizTestView(TestCase):
 
         # When
         soup = BeautifulSoup(response.content, "html.parser")
+        all_question_div = soup.find_all("div", id="question")
 
         # Then
         """
         퀴즈의 문제개수 10개인지 확인
         퀴즈의 문제내용 일치하는지 10개 모두 확인(for문돌리기)
         """
-        self.assertEqual(quiz_question.count(), 10)
+        self.assertEqual(len(all_question_div), 10)
         for question_num in range(1, 11):
             question_div = soup.find("div", id=f"question{question_num}")
             self.assertEqual(question_div.text, f"문제{question_num}번 내용")
