@@ -22,27 +22,6 @@ class StartQuizTestView(TestCase):
         # 퀴즈 1개
         self.quiz_001 = Quiz.objects.create(author=self.user, title="나를 맞춰봐!")
 
-        # 문제 10개
-        for question_num in range(1, 11):
-            self.quiz_001_question = QuizQuestion.objects.create(
-                quiz=self.quiz_001, no=question_num, content=f"문제{question_num}번 내용"
-            )
-
-            # 한 문제당 보기 4개
-            for example_num in range(1, 5):
-                QuizExample.objects.create(
-                    question=self.quiz_001_question,
-                    no=example_num,
-                    content=f"문제{question_num}-보기{example_num}번 내용",
-                )
-
-            # 답(무조건 1번)
-            self.quizexample_answer = QuizExample.objects.get(
-                question=self.quiz_001_question, no=1
-            )
-            self.quizexample_answer.answer = True
-            self.quizexample_answer.save()
-
     # TODO: 문제 시작하기 페이지 이동했을경우 quiz_start 페이지 확인(GET)
     # 1. 로그인 확인 여부없이 quiz_start 페이지로 이동 확인
     def test_enter_quiz_start_page(self):
