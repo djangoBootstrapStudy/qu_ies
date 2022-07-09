@@ -1,3 +1,5 @@
+from datetime import date
+
 from bs4 import BeautifulSoup
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
@@ -88,10 +90,32 @@ class SolveQuizTestView(TestCase):
         # Then
         self.assertIn(saying.text, sayings)
 
-    # 4. 시작하기 버튼
-    #   시작하기 버튼 누르면 성명, 응시일자 저장되는지 확인
-    #   시작하기 버튼 누르면 필적확인란 값 일치하는지 확인
-    #   시작하기 버튼 누르면 quiz_solve 페이지로 이동 확인
+    # TODO: 문제 시작하기 페이지 이동했을경우 quiz_start 페이지 확인(POST)
+    # 1. 시작하기 버튼 누르면 필적확인란 값이 다를경우 재로드 확인
+    def test_quiz_start_page_post_diffrent_saying_check(self):
+        # Given
+        response = self.client.get(self.quiz_001.get_absolute_url())
+        saying = response.context["saying"]
+        data = {
+            "saying": saying,
+            "follow-saying": "제시된 필적확인란과 다르게 적음",
+        }
+
+        # When
+        self.client.post(self.quiz_001.get_absolute_url(), data)
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        # Then
+        """
+        필적확인란 값이 다른지 확인
+        quiz_start.html 재로드
+        """
+        self.assertNotEqual(data["saying"], data["follow-saying"])
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual("문제 시작 페이지", soup.title.text)
+
+    # 2. 시작하기 버튼 누르면 필적확인란이 같을경우 응시자와 오늘날짜가 session에 들어가는지 확인
+    # 3. 시작하기 버튼 누르면 필적확인란이 같을경우 quiz_solve 페이지로 이동 확인
 
     # TODO: 문제풀기 페이지로 이동했을경우 quiz_solve 페이지 확인
     # 1. quiz의 테스트 제목, 출제자 확인
