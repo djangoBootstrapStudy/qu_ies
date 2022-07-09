@@ -87,8 +87,8 @@ class SolveQuizTestView(TestCase):
         saying = soup.find("div", id="random-saying")
 
         # Then
-        '''response로 보낸 명언과 html의 명언 일치확인'''
-        self.assertEqual(response.context['saying'], saying.text)
+        """response로 보낸 명언과 html의 명언 일치확인"""
+        self.assertEqual(response.context["saying"], saying.text)
 
     # TODO: 문제 시작하기 페이지 이동했을경우 quiz_start 페이지 확인(POST)
     # 1. 시작하기 버튼 누르면 필적확인란 값이 다를경우 재로드 확인
