@@ -215,7 +215,26 @@ class SolveQuizTestView(TestCase):
         self.assertEqual(tester_name, session["tester_name"])  # 응시자
         self.assertEqual(test_date, session["test_date"])  # 응시일자
 
-    # 3. quiz의 문제수 10개인지 확인, 문제 일치 확인
+    # 3. quiz의 테스트 제목, 출제자 확인
+    def test_quiz_solve_page_get_quiz_check(self):
+        # Given
+        response = self.client.get(self.quiz_001_url)
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+        quiz_title = soup.find("div", id="quiz-title")
+        quiz_author = soup.find("div", id="quiz-author")
+
+        # Then
+        """
+        response시 pk에 맞는 quiz object 인지 확인
+        quiz의 문제 제목 확인
+        quiz의 문제 출제자 확인
+        """
+        self.assertEqual(response.context["quiz"], self.quiz_001)
+        self.assertEqual(self.quiz_001.title, quiz_title.text)
+        self.assertEqual(self.quiz_001.author.username, quiz_author.text)
+
     # 4. quiz의 보기수 40개인지 확인, 각 문제 보기 1번 확인
     # 5. 선택한 답의 수가 완료문항수와 같은지 확인
 
