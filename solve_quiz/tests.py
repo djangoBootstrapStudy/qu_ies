@@ -93,8 +93,8 @@ class StartQuizTestView(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual("문제 시작 페이지", soup.title.text)
 
-    # 2. 시작하기 버튼 누르면 필적확인란이 같을경우 응시자와 오늘날짜가 session에 들어가는지 확인
-    def test_quiz_start_page_post_same_saying_tester_and_today_in_session_check(self):
+    # 2. 시작하기 버튼 누르면 필적확인란이 같을경우 info(응시자와 오늘날짜)가 session에 들어가는지 확인
+    def test_quiz_start_page_post_same_saying_info_in_session_check(self):
         # Given
         response = self.client.get(self.quiz_001.get_absolute_url())
         saying = response.context["saying"]
