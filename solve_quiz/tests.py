@@ -45,7 +45,7 @@ class SolveQuizTestView(TestCase):
 
     # TODO: 문제 시작하기 페이지 이동했을경우 quiz_start 페이지 확인(GET)
     # 1. 로그인 확인 여부없이 quiz_start 페이지로 이동 확인
-    def test_enter_quiz_start(self):
+    def test_enter_quiz_start_page(self):
         # Given
         response = self.client.get(self.quiz_001.get_absolute_url())
 
@@ -58,7 +58,7 @@ class SolveQuizTestView(TestCase):
         self.assertEqual("문제 시작 페이지", soup.title.text)
 
     # 2. quiz의 테스트 제목, 출제자 확인
-    def test_quiz_start_get_title_and_user_check(self):
+    def test_quiz_start_page_get_title_and_user_check(self):
         # Given
         response = self.client.get(self.quiz_001.get_absolute_url())
 
@@ -78,7 +78,7 @@ class SolveQuizTestView(TestCase):
         self.assertEqual(self.quiz_001.author.username, quiz_author.text)
 
     # 3. 필적확인란 랜덤 명언 값 존재하는지 확인하기
-    def test_quiz_start_get_random_saying_check(self):
+    def test_quiz_start_page_get_random_saying_check(self):
         # Given
         response = self.client.get(self.quiz_001.get_absolute_url())
 
