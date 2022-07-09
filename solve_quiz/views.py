@@ -58,7 +58,9 @@ def solve_quiz(request, pk):
     if tester_name is not None:  # 세션이 있을경우
         if request.method == "GET":
             quiz = Quiz.objects.get(id=pk)
-            return render(request, "solve_quiz/quiz.html", {"quiz": quiz})
+            questions = QuizQuestion.objects.filter(quiz=quiz)
+            return render(
+                request, "solve_quiz/quiz.html", {"quiz": quiz, "questions": questions}
+            )
     else:  # 세션이 없을경우
         return redirect(f"/qui-es/{pk}/")
-    return render(request, "solve_quiz/quiz.html")

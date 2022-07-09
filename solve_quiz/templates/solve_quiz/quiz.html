@@ -7,5 +7,13 @@
 <body>
     <div id="quiz-title">{{ quiz.title }}</div>
     <div id="quiz-author">{{ quiz.author }}</div>
+    {% for question in questions %}
+        <div class="quiz">
+            <div class="question">
+                <span>Q{{ question.no }}.</span>
+                <div id="question{{ question.no }}">{{ question.content }}</div>
+            </div>
+        </div>
+    {% endfor %}
 </body>
 </html>
