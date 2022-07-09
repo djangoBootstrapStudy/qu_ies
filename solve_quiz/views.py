@@ -41,7 +41,6 @@ def start_quiz(request, pk):
 
             tester_name = request.POST["tester-name"]
             test_date = request.POST["test-date"]
-            print(test_date)
 
             """세션을 이용해 응시자 정보 저장"""
             request.session["tester_name"] = tester_name
@@ -57,10 +56,21 @@ def solve_quiz(request, pk):
     tester_name = request.session["tester_name"]
     if tester_name is not None:  # 세션이 있을경우
         if request.method == "GET":
+
             quiz = Quiz.objects.get(id=pk)
-            questions = QuizQuestion.objects.filter(quiz=quiz)
+
+            questions = QuizQuestion.objects.filter(quiz=quiz.id)
+
+            examples = []
+            for question in questions:
+                quiz_example = QuizExample.objects.filter(question=question)
+                for example in quiz_example:
+                    examples.append(example)
+
             return render(
-                request, "solve_quiz/quiz.html", {"quiz": quiz, "questions": questions}
+                request,
+                "solve_quiz/quiz.html",
+                {"quiz": quiz, "questions": questions, "examples": examples},
             )
     else:  # 세션이 없을경우
         return redirect(f"/qui-es/{pk}/")

@@ -13,6 +13,17 @@
                 <span>Q{{ question.no }}.</span>
                 <div id="question{{ question.no }}">{{ question.content }}</div>
             </div>
+            <div class="example-box">
+                {% for ex in examples %}
+                    {% if ex.question.no == question.no %}
+                        <div class="example" id="example">
+                            <input class="form-check-input" type="radio" value="{{ ex.no }}" name="example{{ question.no }}" id="exampleRadios1" checked>
+                            <span>{{ ex.no }}.</span>
+                            <div id="q{{ question.no }}_{{ ex.no }}">{{ ex.content }}</div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
     {% endfor %}
 </body>
