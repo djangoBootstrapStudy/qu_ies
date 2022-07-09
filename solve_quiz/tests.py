@@ -58,20 +58,24 @@ class SolveQuizTestView(TestCase):
         self.assertEqual("문제 시작 페이지", soup.title.text)
 
     # 2. quiz의 테스트 제목, 출제자 확인
-    def test_quiz_start_title_and_user_check(self):
+    def test_quiz_start_get_title_and_user_check(self):
         # Given
         response = self.client.get(self.quiz_001.get_absolute_url())
 
         # When
         soup = BeautifulSoup(response.content, "html.parser")
-        quiz_title = soup.find("div", id="quiz_title")
-        quiz_author = soup.find("div", id="quiz_author")
+        quiz_title = soup.find("div", id="quiz-title")
+        quiz_author = soup.find("div", id="quiz-author")
 
         # Then
-        self.assertIn(self.quiz_001.title, quiz_title.text)  # quiz의 문제 제목 확인
-        self.assertEqual(
-            self.quiz_001.author.username, quiz_author.text
-        )  # quiz의 문제 출제자 확인
+        """
+        response시 pk에 맞는 quiz object 인지 확인
+        quiz의 문제 제목 확인
+        quiz의 문제 출제자 확인
+        """
+        self.assertEqual(response.context["quiz"], self.quiz_001)
+        self.assertEqual(self.quiz_001.title, quiz_title.text)
+        self.assertEqual(self.quiz_001.author.username, quiz_author.text)
 
     # 3. 필적확인란 랜덤 명언 값 존재하는지 확인하기
     def test_quiz_start_random_saying_check(self):
