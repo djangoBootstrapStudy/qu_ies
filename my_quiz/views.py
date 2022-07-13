@@ -4,7 +4,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView, UpdateView
 
-from make_quiz.models import QuizExample, QuizQuestion # UpdateView에서 필요
+from make_quiz.models import QuizExample, QuizQuestion  # UpdateView에서 필요
 
 from .models import Quiz
 
