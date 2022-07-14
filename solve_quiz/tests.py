@@ -286,10 +286,10 @@ class SolveQuizTestView(TestCase):
 
         # When
         soup = BeautifulSoup(response.content, "html.parser")
-        select_answer=soup.find("div",id="select-answer")
+        select_answer = soup.find("div", id="select-answer")
 
         # Then
-        self.assertEqual(select_answer.text,0)
+        self.assertEqual(select_answer.text, "0")
 
     # TODO: 버튼 확인
     # 1. 그만두기 버튼 누르면 메인페이지로 이동 확인
