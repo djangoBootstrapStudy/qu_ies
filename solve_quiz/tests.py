@@ -279,7 +279,17 @@ class SolveQuizTestView(TestCase):
             no10_example_div = soup.find("div", id=f"q10_{example_num}")
             self.assertEqual(no10_example_div.text, f"문제10-보기{example_num}번 내용")
 
-    # 6. 선택한 답의 수가 완료문항수와 같은지 확인
+    # 6. 선택한 답의 수는 아직 없으므로 0인지 확인
+    def test_quiz_solve_page_get_zero_example_check(self):
+        # Given
+        response = self.client.get(self.quiz_001_url)
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+        select_answer=soup.find("div",id="select-answer")
+
+        # Then
+        self.assertEqual(select_answer.text,0)
 
     # TODO: 버튼 확인
     # 1. 그만두기 버튼 누르면 메인페이지로 이동 확인
