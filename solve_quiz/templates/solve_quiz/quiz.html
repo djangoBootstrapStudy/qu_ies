@@ -5,6 +5,7 @@
     <title>문제 풀기 페이지</title>
 </head>
 <body>
+<div>
     <div id="quiz-title">{{ quiz.title }}</div>
     <div id="quiz-author">{{ quiz.author }}</div>
     {% for question in questions %}
@@ -17,7 +18,7 @@
                 {% for ex in examples %}
                     {% if ex.question.no == question.no %}
                         <div class="example" id="example">
-                            <input class="form-check-input" type="radio" value="{{ ex.no }}" name="example{{ question.no }}" id="exampleRadios1" checked>
+                            <input class="form-check-input" type="radio" value="{{ ex.no }}" name="question{{ question.no }}_examples" id="exampleRadios" onclick="getCheckedCnt()">
                             <span>{{ ex.no }}.</span>
                             <div id="q{{ question.no }}_{{ ex.no }}">{{ ex.content }}</div>
                         </div>
@@ -26,5 +27,8 @@
             </div>
         </div>
     {% endfor %}
+    <div id='select-answer'>0</div>
+</div>
+<script src="/static/js/chkboxcnt.js"></script>
 </body>
 </html>
