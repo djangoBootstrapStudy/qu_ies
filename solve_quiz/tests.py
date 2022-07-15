@@ -54,7 +54,7 @@ class StartQuizTestView(TestCase):
         """
         self.assertEqual(response.context["quiz"], self.quiz_001)
         self.assertEqual(self.quiz_001.title, quiz_title.text)
-        self.assertEqual(f"{self.quiz_001.author.username}님의 퀴즈", quiz_author.text)
+        self.assertEqual(f"출제자: {self.quiz_001.author.username}", quiz_author.text)
 
     # 3. 필적확인란 랜덤 명언 값 존재하는지 확인하기
     def test_quiz_start_page_get_random_saying_check(self):
@@ -233,7 +233,7 @@ class SolveQuizTestView(TestCase):
         """
         self.assertEqual(response.context["quiz"], self.quiz_001)
         self.assertEqual(self.quiz_001.title, quiz_title.text)
-        self.assertEqual(self.quiz_001.author.username, quiz_author.text)
+        self.assertEqual(f"출제자: {self.quiz_001.author.username}", quiz_author.text)
 
     # 4. quiz의 문제수 10개인지 확인, 문제 일치 확인
     def test_quiz_solve_page_get_question_check(self):
