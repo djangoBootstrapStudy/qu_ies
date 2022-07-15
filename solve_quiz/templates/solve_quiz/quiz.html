@@ -22,12 +22,12 @@
         <div class="quizzes">
             {% for question in questions %}
 
-                <div class="quiz">
+                <div class="quiz" id="quiz">
                     <div class="question" id="question">
                         <span>Q{{ question.no }}.</span>
                         <div id="question{{ question.no }}">{{ question.content }}</div>
                     </div>
-                    <div class="example-box">
+                    <div class="example-box" id="example-box">
                         {% for ex in examples %}
                             {% if ex.question.no == question.no %}
                                 <div class="example" id="example">
