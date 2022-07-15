@@ -279,7 +279,34 @@ class SolveQuizTestView(TestCase):
             no10_example_div = soup.find("div", id=f"q10_{example_num}")
             self.assertEqual(no10_example_div.text, f"문제10-보기{example_num}번 내용")
 
-    # 6. 선택한 답의 수는 아직 없으므로 0인지 확인
+    # 6. quiz의 각 question의 보기수가 4개인지 모두 확인
+    def test_quiz_solve_page_get_each_question_examples_is_four(self):
+        # Given
+        response = self.client.get(self.quiz_001_url)
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+        all_question_div = soup.find_all("div", id="quiz")
+
+        question_num = 0
+        for question in all_question_div:
+
+            question_num += 1
+            """문제 1개"""
+            question_div = question.find("div", id="question")
+            question_span = question_div.find("span")
+            """문제의 보기 4개"""
+            example_div = question.find_all("div", id="example")
+
+            # Then
+            """
+            몇번 문제인지 확인
+            각 문제의 보기가 4개인지 확인(for문)
+            """
+            self.assertEqual(question_span.text, f"Q{question_num}.")
+            self.assertEqual(len(example_div), 4)
+
+    # 7. 선택한 답의 수는 아직 없으므로 0인지 확인
     def test_quiz_solve_page_get_zero_example_check(self):
         # Given
         response = self.client.get(self.quiz_001_url)
