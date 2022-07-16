@@ -326,17 +326,17 @@ class SolveQuizTestView(TestCase):
 
         # When
         soup = BeautifulSoup(response.content, "html.parser")
-        '''버튼찾기'''
+        """버튼찾기"""
         main_button = soup.find("input", type="button")
-        main_href=main_button.attrs["onclick"][-2]
+        main_href = main_button.attrs["onclick"][-2]
 
-        mainpage_response= self.client.get(main_href)
+        mainpage_response = self.client.get(main_href)
         mainpage_soup = BeautifulSoup(mainpage_response.content, "html.parser")
 
         # Then
-        self.assertEqual(main_href,'/')
+        self.assertEqual(main_href, "/")
         self.assertEqual(mainpage_response.status_code, 200)
-        self.assertEqual(mainpage_soup.title.text,"Qui_es?")
+        self.assertEqual(mainpage_soup.title.text, "Qui_es?")
 
     # 2. 완료 버튼 누르면 정답 세션에 저장 후 세션 확인, 저장된 세션의 답이 10개인지 확인
     def test_quiz_solve_page_post_answer_session_check(self):
