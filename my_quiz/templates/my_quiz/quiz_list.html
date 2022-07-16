@@ -2,24 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>My Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/my_quiz/css/quiz_list.css"/>
 </head>
 <body>
-<h2>My Quiz</h2>
-<div id="main-area">
-    <form action="{% url 'delete' %}" method="post">
-        <ul>
-            {% for q in quiz_list %}
-            <!--{% if q.author == request.user %} 수정하기!! (수정함) -->
-            {% csrf_token %}
-            <li>퀴즈 제목: <a href="{{ q.get_absolute_url }}" id="quiz-{{ q.pk }}">{{ q.title }}</a></li>
-            <input type="checkbox" name="deletes[]" value="{{ q.pk }}">
-            <!--{% endif %}-->
-            {% endfor %}
-        </ul>
-        <button id="delete-quiz" type="submit">삭제</button>
-    </form>
-    <a href="/" id="goto-main">메인으로</a> <!-- '도메인/' 으로 이동 -->
+<div class="all">
+    <div class="logo">
+        Qui_es?
+    </div>
+    <span class="welcome-text">{{ user.username }}님 안녕하세요?</span>
+    <hr>
+
+    <div id="main-area">
+        <div class="middle">
+            {% if quiz_list %}
+            <form class="quiz-delete-form" action="{% url 'delete' %}" method="post">
+                <div class="form-area container mt-2">
+                    <ul>
+                        {% for q in quiz_list %}
+                        {% if q.author == request.user %}
+                        {% csrf_token %}
+                        <div class="container">
+                            <div class="row">
+                                <div class="title-col col">
+                                    <li class="li"><span><a class="title-title text-decoration-none text-reset"
+                                                                           href="{{ q.get_absolute_url }}"
+                                                                           id="quiz-{{ q.pk }}">{{ q.title }}</a></span>
+                                    </li>
+                                </div>
+                                <div class="col">
+                                    <input type="checkbox" name="deletes[]" value="{{ q.pk }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                    <hr>
+
+                    <div class="footer">
+                        <input type="button" class="btn btn-light" id="goto-main" onclick="location.href='/'"
+                               value="메인으로"/>
+                        <button class="btn btn-light" id="delete-quiz" type="submit">삭제</button>
+                    </div>
+                    <!--                    <button id="delete-quiz" type="button" onclick="location.href='{% url 'delete' %}'">삭제</button>-->
+                    <!--                    <a href="/" id="goto-main">-->
+                    <!--                        <button>메인으로</button>-->
+                    <!--                    </a> &lt;!&ndash; '도메인/' 으로 이동 &ndash;&gt;-->
+                </div>
+            </form>
+            {% else %}
+            <h2>아직 만든 퀴즈가 없어요!</h2>
+            {% endif %}
+        </div>
+    </div>
 </div>
 </body>
 </html>
