@@ -1,0 +1,73 @@
+.logo{
+    width: 150px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    font-size: 70px ;
+}
+hr{
+    width:50%;
+    margin: 0px auto;
+}
+body{
+    background: rgba(255, 248, 232, 1);
+}
+ul{
+    list-style :none;
+}
+.middle{
+    /*background: blue;*/
+    height:auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.login-form {
+    text-align: center;
+}
+.login-btn {
+    font-size: 20px;
+    border: 10px, 10px, 10px, 10px;
+    background: rgba(255, 248, 232, 1);
+}
+button{
+    margin: 20px;
+    width:100px;
+}
+.button{
+    margin: 20px;
+    width:300px;
+    border: 2px dashed grey;
+    background: rgba(255, 248, 232, 1);
+}
+.hit-quiz-area {
+    width: 700px;
+    height: auto;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 30px;
+}
+.current-quiz-area{
+    width: 700px;
+    height: auto;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 30px;
+}
+.hit-quiz-list-area{
+    background: rgba(225,185,185,1);
+}
+.current-quiz-list-area{
+    background: rgba(156,217,107);
+}
+.list{
+    background: rgba(255, 248, 232, 1);
+    height: 40px;
+    align-items: center;
+}
+.quiz-title{
+    font-size:15px;
+}

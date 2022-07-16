@@ -1,0 +1,78 @@
+body{
+    background-color: rgba(255, 248, 232, 1);
+}
+a{
+  text-decoration: none;
+}
+.logo{
+    width: 150px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    font-size: 70px;
+}
+.welcome-text{
+    font-size: 30px;
+    font-weight: bolder;
+    margin: 10px;
+    height:70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+hr{
+    width:50%;
+    margin: 0px auto;
+}
+.middle{
+    /*background: blue;*/
+    height:auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.quiz-title{
+    font-size: 50px;
+    font-weight: bolder;
+    color: deepskyblue;
+    margin: 10px;
+}
+.form-area{
+    width: 700px;
+    height: auto;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 20px;
+}
+ul{
+    list-style:none;
+    padding-left:0px;
+}
+.title-row{
+    width: 200px;
+}
+.footer button{
+    margin: 20px;
+    width:100px;
+    border: 2px dashed grey;
+    background: rgba(255, 248, 232, 1);
+}
+.footer{
+    text-align: center;
+}
+.footer input{
+    margin: 20px;
+    width:100px;
+    border: 2px dashed grey;
+    background: rgba(255, 248, 232, 1);
+}
+.title-col{
+    margin-right: 250px;
+}
+.li {
+    width: 300px;
+}
