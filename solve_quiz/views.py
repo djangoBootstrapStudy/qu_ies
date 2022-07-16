@@ -54,6 +54,7 @@ def start_quiz(request, pk):
 
 def solve_quiz(request, pk):
     tester_name = request.session["tester_name"]
+    print(tester_name)
     if tester_name is not None:  # 세션이 있을경우
         if request.method == "GET":
 
@@ -72,5 +73,26 @@ def solve_quiz(request, pk):
                 "solve_quiz/quiz.html",
                 {"quiz": quiz, "questions": questions, "examples": examples},
             )
+        else:
+            answer = {}
+            for question_no in range(1, 11):
+                answer[question_no] = int(
+                    request.POST.get(f"question{question_no}_answer")
+                )
+            if len(answer) == 10:
+                # print(answer)
+                """세션에 정답 저장"""
+                request.session["answer"] = answer
+
+                return redirect(f"/qui-es/{pk}/result/")
+            else:
+                return redirect(f"/qui-es/{pk}/")
+
     else:  # 세션이 없을경우
         return redirect(f"/qui-es/{pk}/")
+
+
+def result_quiz(request, pk):
+    if request.method == "GET":
+
+        return render(request, "solve_quiz/quiz_result.html")
