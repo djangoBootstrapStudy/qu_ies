@@ -54,7 +54,7 @@ class StartQuizTestView(TestCase):
         """
         self.assertEqual(response.context["quiz"], self.quiz_001)
         self.assertEqual(self.quiz_001.title, quiz_title.text)
-        self.assertEqual(self.quiz_001.author.username, quiz_author.text)
+        self.assertEqual(f"출제자: {self.quiz_001.author.username}", quiz_author.text)
 
     # 3. 필적확인란 랜덤 명언 값 존재하는지 확인하기
     def test_quiz_start_page_get_random_saying_check(self):
@@ -139,12 +139,184 @@ class StartQuizTestView(TestCase):
         # Then
         self.assertEqual(post_response.url, "/qui-es/1/solving/")
 
-    # TODO: 문제풀기 페이지로 이동했을경우 quiz_solve 페이지 확인
-    # 1. quiz의 테스트 제목, 출제자 확인
-    # 2. 응시자의 성명, 응시일자 정보 존재여부 확인
-    # 3. quiz의 문제수 10개인지 확인, 문제 일치 확인
-    # 4. quiz의 보기수 40개인지 확인, 각 문제 보기 1번 확인
-    # 5. 선택한 답의 수가 완료문항수와 같은지 확인
+
+class SolveQuizTestView(TestCase):
+
+    # TODO: SetUp
+    # 퀴즈, 문제, 보기 생성
+    def setUp(self):
+        self.client = Client()
+
+        # 유저
+        self.user = User.objects.create(username="LoveQuiz", password="lovequiz1234")
+
+        # 퀴즈 1개
+        self.quiz_001 = Quiz.objects.create(author=self.user, title="나를 맞춰봐!")
+
+        # 문제 10개
+        for question_num in range(1, 11):
+            self.quiz_001_question = QuizQuestion.objects.create(
+                quiz=self.quiz_001, no=question_num, content=f"문제{question_num}번 내용"
+            )
+
+            # 한 문제당 보기 4개
+            for example_num in range(1, 5):
+                QuizExample.objects.create(
+                    question=self.quiz_001_question,
+                    no=example_num,
+                    content=f"문제{question_num}-보기{example_num}번 내용",
+                )
+
+            # 답(무조건 1번)
+            self.quizexample_answer = QuizExample.objects.get(
+                question=self.quiz_001_question, no=1
+            )
+            self.quizexample_answer.answer = True
+            self.quizexample_answer.save()
+
+        # quiz_001_url
+        self.quiz_001_url = f"/qui-es/{self.quiz_001.pk}/solving/"
+
+        # 퀴즈시작페이지에서 session추가
+        self.data = {
+            "tester-name": "퀴즈가 좋아!",
+            "test-date": date.today(),
+            "follow-saying": "필적확인란",
+            "saying": "필적확인란",
+        }
+        self.client.post(self.quiz_001.get_absolute_url(), self.data)
+
+    # TODO: 문제풀기 페이지로 이동했을경우 quiz_solve 페이지 확인(GET)
+    # 1. 퀴즈 문제 풀기 페이지 이동
+    def test_enter_quiz_solve_page(self):
+        # Given
+        response = self.client.get(self.quiz_001_url)
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        # Then
+        self.assertEqual(self.quiz_001_url, "/qui-es/1/solving/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual("문제 풀기 페이지", soup.title.text)
+
+    # 2. info(응시자, 응시일자 정보) 존재여부 확인
+    def test_quiz_solve_page_get_info_in_session_check(self):
+        # Given
+        self.client.get(self.quiz_001_url)
+        session = self.client.session
+
+        # When
+        """세션가져오기"""
+        tester_name = session["tester_name"]
+        test_date = session["test_date"]
+
+        # Then
+        self.assertEqual(tester_name, session["tester_name"])  # 응시자
+        self.assertEqual(test_date, session["test_date"])  # 응시일자
+
+    # 3. quiz의 테스트 제목, 출제자 확인
+    def test_quiz_solve_page_get_quiz_check(self):
+        # Given
+        response = self.client.get(self.quiz_001_url)
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+        quiz_title = soup.find("div", id="quiz-title")
+        quiz_author = soup.find("div", id="quiz-author")
+
+        # Then
+        """
+        response시 pk에 맞는 quiz object 인지 확인
+        quiz의 문제 제목 확인
+        quiz의 문제 출제자 확인
+        """
+        self.assertEqual(response.context["quiz"], self.quiz_001)
+        self.assertEqual(self.quiz_001.title, quiz_title.text)
+        self.assertEqual(f"출제자: {self.quiz_001.author.username}", quiz_author.text)
+
+    # 4. quiz의 문제수 10개인지 확인, 문제 일치 확인
+    def test_quiz_solve_page_get_question_check(self):
+        # Given
+        response = self.client.get(self.quiz_001_url)
+        quiz_question = QuizQuestion.objects.filter(quiz=self.quiz_001)
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+        all_question_div = soup.find_all("div", id="question")
+
+        # Then
+        """
+        퀴즈의 문제개수 10개인지 확인
+        퀴즈의 문제내용 일치하는지 10개 모두 확인(for문돌리기)
+        """
+        self.assertEqual(len(all_question_div), 10)
+        for question_num in range(1, 11):
+            question_div = soup.find("div", id=f"question{question_num}")
+            self.assertEqual(question_div.text, f"문제{question_num}번 내용")
+
+    # 5. quiz의 보기수 40개인지 확인, 문제 1,10번만 보기확인
+    def test_quiz_solve_page_get_example_check(self):
+        # Given
+        response = self.client.get(self.quiz_001_url)
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+        all_example_div = soup.find_all("div", id="example")
+
+        # Then
+        """
+        보기개수가 총 40개인지 확인(문제10*보기4)
+        문제 1번의 보기내용이 일치한지 확인(for문)
+        문제 10번의 보기내용이 일치한지 확인(for문)
+        """
+        self.assertEqual(len(all_example_div), 40)
+        for example_num in range(1, 4):
+            no1_example_div = soup.find("div", id=f"q1_{example_num}")
+            self.assertEqual(no1_example_div.text, f"문제1-보기{example_num}번 내용")
+
+        for example_num in range(1, 4):
+            no10_example_div = soup.find("div", id=f"q10_{example_num}")
+            self.assertEqual(no10_example_div.text, f"문제10-보기{example_num}번 내용")
+
+    # 6. quiz의 각 question의 보기수가 4개인지 모두 확인
+    def test_quiz_solve_page_get_each_question_examples_is_four(self):
+        # Given
+        response = self.client.get(self.quiz_001_url)
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+        all_question_div = soup.find_all("div", id="quiz")
+
+        question_num = 0
+        for question in all_question_div:
+
+            question_num += 1
+            """문제 1개"""
+            question_div = question.find("div", id="question")
+            question_span = question_div.find("span")
+            """문제의 보기 4개"""
+            example_div = question.find_all("div", id="example")
+
+            # Then
+            """
+            몇번 문제인지 확인
+            각 문제의 보기가 4개인지 확인(for문)
+            """
+            self.assertEqual(question_span.text, f"Q{question_num}.")
+            self.assertEqual(len(example_div), 4)
+
+    # 7. 선택한 답의 수는 아직 없으므로 0인지 확인
+    def test_quiz_solve_page_get_zero_example_check(self):
+        # Given
+        response = self.client.get(self.quiz_001_url)
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+        select_answer = soup.find("div", id="select-answer")
+
+        # Then
+        self.assertEqual(select_answer.text, "0")
 
     # TODO: 버튼 확인
     # 1. 그만두기 버튼 누르면 메인페이지로 이동 확인

@@ -3,23 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <title>문제 시작 페이지</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/quiz_start.css" />
 </head>
 <body>
-<form name="frm" action="" method="post">
-    {% csrf_token %}
-    <div id="quiz-title">{{ quiz.title }}</div>
-    <div id="quiz-author">{{ quiz.author }}</div>
-    <div id="random-saying">{{ saying }}</div>
-
-    <input type="text" name="tester-name" placeholder="응시자 이름을 입력해주세요">
-    <input type="date" id="test-date" name="test-date" placeholder="응시날짜를 입력해주세요">
-    <input type="text" id="saying" name="follow-saying" placeholder="따라 써주세요">
-    <input type="hidden" name="saying" value="{{ saying }}">
-
-
-    <div class="footer">
-        <input type="submit" class="btn btn-light" id="start-btn" value="시작하기"/>
+<div class="all">
+    <div class="header">
+        <div class="logo">Qui_es?</div>
     </div>
-</form>
+    <hr>
+    <form name="frm" action="" method="post">
+        {% csrf_token %}
+        <div class="middle">
+            <div class="quiz-info">
+                <div id="quiz-title">{{ quiz.title }}</div>
+                <div id="quiz-author">출제자: {{ quiz.author }}</div>
+            </div>
+            <hr>
+            <div class="tester-info">
+                <div class="input-name">
+                    <span>성명 </span>
+                    <input type="text" name="tester-name" placeholder="성명을 입력해주세요">
+                </div>
+                <div class="input-date">
+                    <span>응시일자</span>
+                    <input type="date" id="test-date" name="test-date" placeholder="날짜를 입력해주세요">
+                </div>
+            </div>
+            <div class="random">
+                <div>필적확인란</div>
+                <div id="random-saying">{{ saying }}</div>
+                <input type="text" id="saying" name="follow-saying" placeholder="따라 써주세요">
+                <input type="hidden" name="saying" value="{{ saying }}">
+            </div>
+
+        </div>
+        <hr/>
+
+        <div class="footer">
+            <input type="submit" class="btn btn-light" id="start-btn" value="시작하기"/>
+        </div>
+    </form>
+</div>
 </body>
 </html>

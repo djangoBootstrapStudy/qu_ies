@@ -1,0 +1,89 @@
+body{
+    background: rgba(255, 248, 232, 1);
+}
+hr{
+    width:50%;
+    margin: 0px auto;
+}
+.logo{
+    width: 150px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    font-size: 70px ;
+}
+.quiz-info{
+    height: 105px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#quiz-title{
+    font-size: 33px ;
+}
+#quiz-author{
+    font-size:18px ;
+    margin-top: 5px;
+}
+.quizzes {
+    width: 50%;
+    height:370px;
+    overflow: auto;
+    margin: 0 auto;
+}
+.quiz{
+    display: flex;
+    flex-direction: column;
+    margin: 14px auto;
+}
+.question{
+    display: flex;
+    flex-direction: row;
+    margin: 8px 0;
+}
+.question span{
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 5%;
+}
+.question div{
+    font-size: 20px;
+    font-weight: bold;
+}
+.example{
+    display: flex;
+    flex-direction: row;
+    margin:3% 10%;
+}
+.example span{
+    margin:0 2%;
+}
+.answer{
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    width: 50%;
+    margin: auto;
+    font-weight: bold;
+
+}
+.answer div{
+    color: deepskyblue;
+    margin: 0 3px;
+}
+.answer span{
+    font-size: 17px;
+}
+
+.footer{
+    text-align: center;
+}
+.footer input{
+    font-size: 20px;
+    margin: 15px 70px;
+    padding:10px;
+}
