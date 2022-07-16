@@ -28,7 +28,7 @@ class CreateQuizTestView(TestCase):
 
         # then
         self.assertEqual(response.status_code, 200)
-        self.assertEqual("메인", soup.title.text)
+        self.assertEqual("Qui_es?", soup.title.text)
 
     # 로그인되었을경우
     def test_check_login(self):
