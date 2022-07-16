@@ -81,7 +81,7 @@ class TestMyQuiz(TestCase):
             self.assertEqual(quiz_title.text, q.title)
 
         # '메인으로' 버튼 유무
-        self.assertTrue(main_area.find("a", id="goto-main"))
+        self.assertTrue(main_area.find("input", id="goto-main"))
 
     def test_delete_quiz(self):
         """로그인한 사용자가 삭제할 퀴즈를 체크박스로 선택 -> 삭제 버튼을 눌러 삭제하는 과정을 테스트"""
@@ -213,20 +213,24 @@ class TestMain(TestCase):
         current_quiz_area = soup.find("div", id="current-quiz-area")
 
         # When
-        private_title = list([i.title for i in private_quiz])  # 비공개 퀴즈의 제목만 가져옴
-        public_title = list([i.title for i in public_quiz])  # 공개 퀴즈의 제목만 가져옴
+        private_title = [i.title for i in private_quiz]  # 비공개 퀴즈의 제목만 가져옴
+        public_title = [i.title for i in public_quiz]  # 공개 퀴즈의 제목만 가져옴
 
         hit_quiz = hit_quiz_area.find_all("a")
-        hit_quiz_title = list([i.text[:-3] for i in hit_quiz])  # 제목만 가져옴
+        hit_quiz_title = [i.text[:-3] for i in hit_quiz]  # 제목만 가져옴
 
         current_quiz = current_quiz_area.find_all("a")
-        current_quiz_title = list([i.title[:-3] for i in current_quiz])  # 제목만 가져옴
+        current_quiz_title = [i.text[:-3] for i in current_quiz]  # 제목만 가져옴
 
         # Then
-        self.assertNotIn(private_title, hit_quiz_title)  # private 퀴즈가 hit quiz 목록에 없는지 확인
+        self.assertNotIn(
+            private_title, hit_quiz_title
+        )  # private 퀴즈가 hit quiz 목록에 없는지 확인
         self.assertEqual(public_title, hit_quiz_title)  # public 퀴즈가 hit quiz 목록에 있는지 확인
 
-        self.assertNotIn(private_title, current_quiz_title)  # 동잏한 방법으로 current quiz 목록 확인
+        self.assertNotIn(
+            private_title, current_quiz_title
+        )  # 동잏한 방법으로 current quiz 목록 확인
         self.assertEqual(public_title, current_quiz_title)
 
     def create_hit_quiz(self):
@@ -310,12 +314,14 @@ class TestMain(TestCase):
         """current quiz는 생성 일자가 늦을수록 위에 있어야 함"""
         # Given
         sort_quiz = Quiz.objects.order_by("-create_at")  # create_at 을 기준으로 정렬
-        sort_quiz_title = [i.title for i in sort_quiz if i.private is False]  # 공개 퀴즈만 보여야함
+        sort_quiz_title = [
+            i.title for i in sort_quiz if i.private is False
+        ]  # 공개 퀴즈만 보여야함
 
         # When
         response = self.client.get(self.main_url)
         soup = BeautifulSoup(response.content, "html.parser")
-        
+
         # current quiz 목록에서 quiz title 가져오기
         current_quiz_area = soup.find("div", id="current-quiz-area")
         current_quiz = current_quiz_area.find_all("a")
