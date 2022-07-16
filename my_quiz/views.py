@@ -43,6 +43,8 @@ class MyQuizUpdate(UpdateView):  # TODO : 배포 후에 손대기!!!!!!
 def delete_quiz(request):
     if request.method == "POST":
         deletes = request.POST.getlist("deletes[]")
+        if len(deletes) == 0:
+            return redirect("/my-qui-es/")
         for i in deletes:
             delete_quiz = Quiz.objects.get(pk=i)
         if request.user.is_authenticated and request.user == delete_quiz.author:
@@ -55,13 +57,14 @@ def delete_quiz(request):
 
 
 def main(request):
-    # 조회수로 정렬
-    hit_sort_quiz = list(Quiz.objects.order_by("-hit"))
-    hit_quiz = hit_sort_quiz[:5]
+    if Quiz.objects.filter(private=False):
+        # 조회수로 정렬
+        hit_sort_quiz = list(Quiz.objects.order_by("-hit"))
+        hit_quiz = hit_sort_quiz[:5]
 
-    # create_at으로 정렬
-    create_sort_quiz = list(Quiz.objects.order_by("-create_at"))
-    current_quiz = create_sort_quiz[:5]
+        # create_at으로 정렬
+        create_sort_quiz = list(Quiz.objects.order_by("-create_at"))
+        current_quiz = create_sort_quiz[:5]
 
     if request.user.is_authenticated:
         return render(
@@ -79,9 +82,11 @@ def main(request):
     else:
         # 로그인에 필요한 빈 종이를 생성해서 lognin.html 에 전달
         form = AuthenticationForm()
+
     context = {
         "form": form,
         "hit_quiz": hit_quiz,
         "current_quiz": current_quiz,
     }
+
     return render(request, "main.html", context)
