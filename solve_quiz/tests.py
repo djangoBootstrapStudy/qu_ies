@@ -320,19 +320,23 @@ class SolveQuizTestView(TestCase):
 
     # TODO: 문제풀기 페이지로 이동했을경우 quiz_solve 페이지 확인(POST)
     # 1. 그만두기 버튼 누르면 메인페이지로 이동 확인
-    # def test_quiz_solve_page_post_main_button(self):
-    #     # Given
-    #     response = self.client.get(self.quiz_001_url)
-    #
-    #     # When
-    #     soup = BeautifulSoup(response.content, "html.parser")
-    #     '''버튼누르기'''
-    #     main_button = soup.find("input", type="button")
-    #
-    #     # Then
-    #     if main_button.attrs["value"] == "그만두기":
-    #         self.assertEqual(response.status_code, 200)
-    #         self.assertEqual("Qui_es?", soup.title.text)
+    def test_quiz_solve_page_post_main_button(self):
+        # Given
+        response = self.client.get(self.quiz_001_url)
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+        '''버튼찾기'''
+        main_button = soup.find("input", type="button")
+        main_href=main_button.attrs["onclick"][-2]
+
+        mainpage_response= self.client.get(main_href)
+        mainpage_soup = BeautifulSoup(mainpage_response.content, "html.parser")
+
+        # Then
+        self.assertEqual(main_href,'/')
+        self.assertEqual(mainpage_response.status_code, 200)
+        self.assertEqual(mainpage_soup.title.text,"Qui_es?")
 
     # 2. 완료 버튼 누르면 정답 세션에 저장 후 세션 확인, 저장된 세션의 답이 10개인지 확인
     def test_quiz_solve_page_post_answer_session_check(self):
