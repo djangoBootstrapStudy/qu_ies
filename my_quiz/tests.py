@@ -25,7 +25,6 @@ class TestMyQuiz(TestCase):
         )
 
         self.my_quiz_url = "/my-qui-es/"  # My Quiz 페이지 url
-        self.quiz_001_url = f"/my-qui-es/{self.quiz_001.pk}"  # 퀴즈 001의 디테일 페이지 url
         self.main_url = "/"
 
     # TODO : Given-When-Then 으로 작성!!
@@ -137,12 +136,11 @@ class TestMyQuiz(TestCase):
 
         # When
         response = self.client.get(self.my_quiz_url)
-        self.assertEqual(response.status_code, 200)
-
         soup = BeautifulSoup(response.content, "html.parser")
         main_area = soup.find("div", id="main-area")
 
         # Then
+        self.assertEqual(response.status_code, 200)
         self.assertIn("아직 만든 퀴즈가 없어요!", main_area.find("h2").text)
 
     # TODO : Update 페이지 기능 구현 테스트 ( 배포 이후 작업 )
@@ -191,7 +189,6 @@ class TestMain(TestCase):
         )
 
         self.my_quiz_url = "/my-qui-es/"  # My Quiz 페이지 url
-        self.quiz_001_url = f"/my-qui-es/{self.quiz_001.pk}"  # 퀴즈 001의 디테일 페이지 url
         self.main_url = "/"
 
     def test_private_quiz(self):
@@ -325,6 +322,8 @@ class TestMain(TestCase):
         # current quiz 목록에서 quiz title 가져오기
         current_quiz_area = soup.find("div", id="current-quiz-area")
         current_quiz = current_quiz_area.find_all("a")
+
+        print(current_quiz)
 
         current_quiz_title = [i.text[:-3] for i in current_quiz]  # 제목만 가져옴
 
