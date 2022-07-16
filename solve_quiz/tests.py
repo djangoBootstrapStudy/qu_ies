@@ -212,8 +212,8 @@ class SolveQuizTestView(TestCase):
         test_date = session["test_date"]
 
         # Then
-        self.assertEqual(tester_name, session["tester_name"])  # 응시자
-        self.assertEqual(test_date, session["test_date"])  # 응시일자
+        self.assertEqual(tester_name, self.data["tester-name"])  # 응시자
+        self.assertEqual(test_date, self.data["test-date"].strftime("%Y-%m-%d"))  # 응시일자
 
     # 3. quiz의 테스트 제목, 출제자 확인
     def test_quiz_solve_page_get_quiz_check(self):
@@ -318,11 +318,79 @@ class SolveQuizTestView(TestCase):
         # Then
         self.assertEqual(select_answer.text, "0")
 
-    # TODO: 버튼 확인
+    # TODO: 문제풀기 페이지로 이동했을경우 quiz_solve 페이지 확인(POST)
     # 1. 그만두기 버튼 누르면 메인페이지로 이동 확인
-    # 2. 완료버튼
-    #   완료 버튼 누르면 quiz의 선택한 정답수 10개인지 확인
-    #   완료 버튼 누르면 답확인 페이지로 이동 확인
+    def test_quiz_solve_page_post_main_button(self):
+        # Given
+        response = self.client.get(self.quiz_001_url)
+
+        # When
+        soup = BeautifulSoup(response.content, "html.parser")
+        """버튼찾기"""
+        main_button = soup.find("input", type="button")
+        main_href = main_button.attrs["onclick"][-2]
+
+        mainpage_response = self.client.get(main_href)
+        mainpage_soup = BeautifulSoup(mainpage_response.content, "html.parser")
+
+        # Then
+        self.assertEqual(main_href, "/")
+        self.assertEqual(mainpage_response.status_code, 200)
+        self.assertEqual(mainpage_soup.title.text, "Qui_es?")
+
+    # 2. 완료 버튼 누르면 정답 세션에 저장 후 세션 확인, 저장된 세션의 답이 10개인지 확인
+    def test_quiz_solve_page_post_answer_session_check(self):
+        # Given
+        """각 문제의 답 세션에 저장"""
+        data = {
+            "question1_answer": 1,
+            "question2_answer": 2,
+            "question3_answer": 3,
+            "question4_answer": 4,
+            "question5_answer": 1,
+            "question6_answer": 2,
+            "question7_answer": 3,
+            "question8_answer": 4,
+            "question9_answer": 1,
+            "question10_answer": 2,
+        }
+        # When
+        self.client.post(self.quiz_001_url, data)
+        session = self.client.session
+        answer = session["answer"]
+
+        # Then
+        """
+        세션에 저장된 답 10개인지 확인
+        세션에 저장된 답 일치하는지 확인
+        """
+        self.assertEqual(len(answer), 10)
+        for question_no in range(1, 11):
+            self.assertEqual(
+                data[f"question{question_no}_answer"], answer[str(question_no)]
+            )
+
+    # 3. 완료 버튼 누르면 답확인 페이지로 이동 확인
+    def test_quiz_solve_page_post_enter_quiz_result_page(self):
+        # Given
+        data = {
+            "question1_answer": 1,
+            "question2_answer": 2,
+            "question3_answer": 3,
+            "question4_answer": 4,
+            "question5_answer": 1,
+            "question6_answer": 2,
+            "question7_answer": 3,
+            "question8_answer": 4,
+            "question9_answer": 1,
+            "question10_answer": 2,
+        }
+
+        # When
+        response = self.client.post(self.quiz_001_url, data)
+
+        # Then
+        self.assertEqual(response.url, "/qui-es/1/result/")
 
     # TODO: 답확인 페이지로 이동했을 경우 quiz_solve_done 페이지 확인
     # 1. 응시자의 성명, 응시일자 정보 확인
