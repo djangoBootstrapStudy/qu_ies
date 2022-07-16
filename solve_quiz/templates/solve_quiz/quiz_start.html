@@ -12,6 +12,7 @@
     <div class="header">
         <div class="logo">Qui_es?</div>
     </div>
+    <input type="hidden" value="{{ quiz.update_counter }}">
     <hr>
     <form name="frm" action="" method="post">
         {% csrf_token %}
