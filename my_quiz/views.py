@@ -12,6 +12,7 @@ from .models import Quiz
 # Create your views here.
 class MyQuizList(ListView):
     model = Quiz
+    template_name = "my_quiz/myquiz.html"
 
     def dispatch(self, request, *args, **kwargs):  # 비정상적인 접근 처리
         if request.user.is_authenticated:  # 로그인한 사용자의 자신의 퀴즈만 보임
