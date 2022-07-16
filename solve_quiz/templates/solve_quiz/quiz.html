@@ -13,6 +13,8 @@
         <div class="logo">Qui_es?</div>
     </div>
     <hr>
+    <form name="frm" action="" method="post">
+    {% csrf_token %}
     <div class="middle">
         <div class="quiz-info">
             <div id="quiz-title">{{ quiz.title }}</div>
@@ -21,7 +23,6 @@
         <hr>
         <div class="quizzes">
             {% for question in questions %}
-
                 <div class="quiz" id="quiz">
                     <div class="question" id="question">
                         <span>Q{{ question.no }}.</span>
@@ -31,7 +32,7 @@
                         {% for ex in examples %}
                             {% if ex.question.no == question.no %}
                                 <div class="example" id="example">
-                                    <input class="form-check-input" type="radio" value="{{ ex.no }}" name="question{{ question.no }}_examples" id="exampleRadios" onclick="getCheckedCnt()">
+                                    <input class="form-check-input" type="radio" value="{{ ex.no }}" name="question{{ question.no }}_answer" id="exampleRadios" onclick="getCheckedCnt()">
                                     <span>{{ ex.no }}.</span>
                                     <div id="q{{ question.no }}_{{ ex.no }}">{{ ex.content }}</div>
                                 </div>
@@ -50,10 +51,13 @@
     </div>
     <div class="footer">
         <input type="button" class="btn btn-light" id="cancel-btn" onclick="location.href='/'" value="그만두기"/>
-        <input type="submit" class="btn btn-light" id="create-btn" value="생성하기"/>
-    </div></div>
+        <input type="submit" class="btn btn-light" id="create-btn" value="생성하기" onclick="getSelectedCnt()"/>
+    </div>
+    </form>
+</div>
 
 </div>
 <script src="/static/js/radiocnt.js"></script>
+<script src="/static/js/select_radiocnt.js"></script>
 </body>
 </html>
