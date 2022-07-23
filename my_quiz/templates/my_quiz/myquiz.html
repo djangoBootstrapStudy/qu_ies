@@ -55,7 +55,14 @@
                 </div>
             </form>
             {% else %}
-            <h2>아직 만든 퀴즈가 없어요!</h2>
+            <h2 class="no-quiz-text">아직 만든 퀴즈가 없어요!</h2>
+            <!-- 나만의 퀴즈 만들러 가기 버튼-->
+            <div class="footer">
+                <input type="button" class="btn btn-light" id="goto-main" onclick="location.href='/'"
+                       value="메인으로"/>
+                <button class="button"><a class="text-decoration-none text-reset" href="/you-qui-es/">나만의 퀴즈 만들러 가기</a>
+                </button>
+            </div>
             {% endif %}
         </div>
     </div>
