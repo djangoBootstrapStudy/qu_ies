@@ -57,22 +57,23 @@ ul{
 }
 .footer button{
     margin: 20px;
-    width:100px;
+    width:300px;
     border: 2px dashed grey;
     background: rgba(255, 248, 232, 1);
 }
 .footer{
     text-align: center;
 }
-.footer input{
-    margin: 20px;
-    width:100px;
-    border: 2px dashed grey;
-    background: rgba(255, 248, 232, 1);
-}
 .title-col{
     margin-right: 250px;
 }
 .li {
     width: 300px;
+}
+.no-quiz-text{
+    height:500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
