@@ -33,9 +33,7 @@ def start_quiz(request, pk):
         """saying: 제시된 랜덤필적확인란, follow_saying: 받아쓴 필적확인란"""
         saying = request.POST["saying"]
         follow_saying = request.POST["follow-saying"]
-        # print(f'제시된 필적확인란:{saying}')
-        # print(f'받아쓴 필적확인란:{follow_saying}')
-
+        print(pk)
         # Todo: 필적확인란이 일치하면 세션 저장 후 quiz페이지
         if follow_saying == saying:
 
@@ -54,7 +52,6 @@ def start_quiz(request, pk):
 
 def solve_quiz(request, pk):
     tester_name = request.session["tester_name"]
-    print(tester_name)
     if tester_name is not None:  # 세션이 있을경우
         if request.method == "GET":
 
