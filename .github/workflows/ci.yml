@@ -21,6 +21,18 @@ jobs:
         run: |
            pip install -r requirements.txt --upgrade pip
 
+      #mysql
+      - name: Start MYSQL
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+        run: |
+         sudo systemctl start mysql
+         mysql -e "use mysql; FLUSH PRIVILEGES; ALTER USER '${{ env.DB_USER }}'@'localhost' IDENTIFIED BY '${{ env.DB_PASSWORD }}';" -uroot -proot
+         mysql -e 'CREATE DATABASE ${{ env.DB_NAME }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+
       # black 추가
       - name: Run Black
         run: black . --check
