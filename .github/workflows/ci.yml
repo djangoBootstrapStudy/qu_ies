@@ -5,6 +5,11 @@ on:
 
 jobs:
   ci:
+    env:
+      DB_NAME: quies
+      DB_USER: root
+      DB_PASSWORD: abcde
+
     runs-on: ubuntu-latest
     steps:
       - name: Check out the codes
@@ -23,11 +28,6 @@ jobs:
 
       #mysql
       - name: Start MYSQL
-        env:
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
         run: |
          sudo systemctl start mysql
          mysql -e "use mysql; FLUSH PRIVILEGES; ALTER USER '${{ env.DB_USER }}'@'localhost' IDENTIFIED BY '${{ env.DB_PASSWORD }}';" -uroot -proot
