@@ -26,8 +26,6 @@ class MyQuizUpdate(UpdateView):  # TODO : 배포 후에 손대기!!!!!!
     model = Quiz
     fields = ["title", ""]  # 어떻게???
 
-    template_name = "make_quiz.html"
-
     def get_context_data(self, **kwargs):
         context = super(MyQuizUpdate, self).get_context_data()
         context["title"] = Quiz.title
@@ -58,14 +56,29 @@ def delete_quiz(request):
 
 
 def main(request):
-    if Quiz.objects.filter(private=False):
-        # 조회수로 정렬
-        hit_sort_quiz = list(Quiz.objects.order_by("-hit"))
-        hit_quiz = hit_sort_quiz[:5]
+    # 퀴즈가 존재하지 않거나 DB의 퀴즈가 모두 비공개일 경우
+    if len(Quiz.objects.all()) == 0 or len(Quiz.objects.all()) == len(
+        Quiz.objects.filter(private=True)
+    ):
+        # 해당 문구를 출력
+        hit_quiz = "퀴즈가 없습니다."
+        current_quiz = "퀴즈가 없습니다."
+        form = AuthenticationForm()
+        context = {"form": form, "hit_quiz": hit_quiz, "current_quiz": [current_quiz]}
 
-        # create_at으로 정렬
-        create_sort_quiz = list(Quiz.objects.order_by("-create_at"))
-        current_quiz = create_sort_quiz[:5]
+        # 퀴즈가 없는 상태에서 로그인 된 상태에서는 form을 보여주지 않음
+        if request.user.is_authenticated:
+            context = {"hit_quiz": [hit_quiz], "current_quiz": [current_quiz]}
+
+    else:
+        if Quiz.objects.filter(private=False):
+            # 조회수로 정렬
+            hit_sort_quiz = list(Quiz.objects.order_by("-hit"))
+            hit_quiz = hit_sort_quiz[:5]
+
+            # create_at으로 정렬
+            create_sort_quiz = list(Quiz.objects.order_by("-create_at"))
+            current_quiz = create_sort_quiz[:5]
 
     if request.user.is_authenticated:
         return render(
@@ -84,10 +97,11 @@ def main(request):
         # 로그인에 필요한 빈 종이를 생성해서 lognin.html 에 전달
         form = AuthenticationForm()
 
-    context = {
-        "form": form,
-        "hit_quiz": hit_quiz,
-        "current_quiz": current_quiz,
-    }
+        context = {
+            "form": form,
+            "hit_quiz": hit_quiz,
+            "current_quiz": current_quiz,
+        }
 
+        return render(request, "main.html", context)
     return render(request, "main.html", context)
