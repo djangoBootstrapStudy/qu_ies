@@ -21,6 +21,9 @@
             <!-- login 버튼 (Figma에서 구상한 모양으로 Start)-->
             {% if not user.is_authenticated %}
             <button class="login-btn border-0" type="submit">Start<i class="bi bi-arrow-right"></i></button>
+            <input type="button" class="signup-btn btn btn-light" id="signup"
+                   onclick="location.href='/accounts/signup/'"
+                   value="Sign Up"/>
             {% else %}
             <div class="d-grid-3 gap-2 d-md-block">
                 <button class="button"><a class="text-decoration-none text-reset" href="/my-qui-es/">My Quiz</a>
@@ -42,13 +45,18 @@
                 <h3 class="list-title my-4">실시간 인기 Quiz!</h3> <!-- css 수정 !! -->
                 <div class="hit-quiz-list-area py-1 pe-4 rounded">
                     <ul>
+                        {% if hit_quiz == "퀴즈가 없습니다." %}
+                        <li class="list rounded-pill my-2"><span class="quiz-title text-decoration-none text-reset ms-3">{{ hit_quiz }}</span>
+                        {% else %}
                         {% for hq in hit_quiz %}
-<!--                        {% if not hq.private %} &lt;!&ndash; 공개 퀴즈만 보이기 &ndash;&gt;-->
+                        <!--                        {% if not hq.private %} &lt;!&ndash; 공개 퀴즈만 보이기 &ndash;&gt;-->
                         <li class="list rounded-pill my-2"><a class="quiz-title text-decoration-none text-reset ms-3"
-                                                         href="{{ hq.get_absolute_url }}"
-                                                         id="quiz-{{ hq.pk }}">{{ hq.title }}({{ hq.hit }})</a></li>
-<!--                        {% endif %}-->
+                                                              href="{{ hq.get_absolute_url }}"
+                                                              id="quiz-{{ hq.pk }}">{{ hq.title }}({{ hq.hit }})</a>
+                        </li>
+                        <!--                        {% endif %}-->
                         {% endfor %}
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -58,13 +66,18 @@
                 <h3 class="list-title my-4">전체 Quiz!</h3>
                 <div class="current-quiz-list-area py-1 pe-4 rounded">
                     <ul>
+                        {% if current_quiz == "퀴즈가 없습니다." %}
+                        <li class="list rounded-pill my-2"><span class="quiz-title text-decoration-none text-reset ms-3">{{ current_quiz }}</span>
+                        {% else %}
                         {% for cq in current_quiz %}
-<!--                        {% if not cq.private %} &lt;!&ndash; 공개 퀴즈만 보이기 &ndash;&gt;-->
+                        <!--                        {% if not cq.private %} &lt;!&ndash; 공개 퀴즈만 보이기 &ndash;&gt;-->
                         <li class="list rounded-pill my-2"><a class="quiz-title text-decoration-none text-reset ms-3"
-                                                         href="{{ cq.get_absolute_url }}"
-                                                         id="quiz-{{ cq.pk }}">{{ cq.title }}({{ cq.hit }})</a></li>
-<!--                        {% endif %}-->
+                                                              href="{{ cq.get_absolute_url }}"
+                                                              id="quiz-{{ cq.pk }}">{{ cq.title }}({{ cq.hit }})</a>
+                        </li>
+                        <!--                        {% endif %}-->
                         {% endfor %}
+                        {% endif %}
                     </ul>
                 </div>
             </div>
